@@ -30,7 +30,6 @@
 </head>
 <body class="antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- Navigation -->
     <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center glass-panel mt-4 rounded-sm">
             <div class="text-xl font-bold tracking-tight flex items-center gap-2">
@@ -49,7 +48,6 @@
         </div>
     </nav>
 
-    <!-- Hero -->
     <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
             <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
@@ -70,8 +68,11 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Gameplay</span>
             </h1>
 
-            <p class="text-cyan-400 font-bold text-lg mb-8 tracking-wide">
+            <p class="text-cyan-400 font-bold text-lg mb-2 tracking-wide">
                 Starting at 300 Robux or $5 USD
+            </p>
+            <p class="text-gray-400 text-sm mb-8 italic">
+                some systems are free, just DM me to check if they are
             </p>
 
             <a href="#projects" class="bg-white text-black px-8 py-3 rounded-lg font-bold hover:bg-gray-200 transition-colors inline-flex items-center gap-2">
@@ -80,7 +81,6 @@
         </div>
     </section>
 
-    <!-- Projects -->
     <section id="projects" class="py-24 bg-black/20">
         <div class="max-w-6xl mx-auto px-6">
             <h2 class="text-3xl font-bold mb-12">Featured Projects</h2>
@@ -88,10 +88,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
 
-                <!-- Ragdoll Project -->
                 <div class="glass-panel rounded-sm overflow-hidden hover:border-cyan-500/30 transition-all duration-300 group">
                     <div class="aspect-video bg-gray-900 relative overflow-hidden">
-
+                         
                         <video src="Ragdoll.mp4" autoplay loop muted class="absolute inset-0 w-full h-full object-cover"></video>
 
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
@@ -106,10 +105,9 @@
                 </div>
 
 
-                <!-- Hole Project -->
                 <div class="glass-panel rounded-sm overflow-hidden hover:border-orange-500/30 transition-all duration-300 group">
                     <div class="aspect-video bg-gray-900 relative overflow-hidden">
-
+                         
                         <video src="Hole.mp4" autoplay loop muted class="absolute inset-0 w-full h-full object-cover"></video>
 
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
@@ -124,7 +122,38 @@
                 </div>
 
 
-                <!-- Soon -->
+                <div class="glass-panel rounded-sm overflow-hidden hover:border-red-500/30 transition-all duration-300 group">
+                    <div class="aspect-video bg-gray-900 relative overflow-hidden">
+                         
+                        <video src="Main menu and combat.mp4" autoplay loop muted class="absolute inset-0 w-full h-full object-cover"></video>
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <span class="bg-red-500/20 text-red-300 px-2 py-1 rounded-sm text-xs font-mono font-bold border border-red-500/30">UI & COMBAT</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold group-hover:text-red-400 transition-colors">RPG Menu System</h3>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-sm overflow-hidden hover:border-blue-500/30 transition-all duration-300 group">
+                    <div class="aspect-video bg-gray-900 relative overflow-hidden">
+                         
+                        <video src="Water physics.mp4" autoplay loop muted class="absolute inset-0 w-full h-full object-cover"></video>
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded-sm text-xs font-mono font-bold border border-blue-500/30">FLUIDS</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold group-hover:text-blue-400 transition-colors">Water Physics</h3>
+                    </div>
+                </div>
+
                 <div class="glass-panel rounded-sm overflow-hidden border border-dashed border-gray-700/50 flex items-center justify-center">
                     <div class="p-4 text-center py-16">
                         <i data-lucide="clock" size="32" class="mb-2 text-gray-500 mx-auto"></i>
@@ -137,7 +166,6 @@
         </div>
     </section>
 
-    <!-- Skills -->
     <section id="skills" class="py-24">
         <div class="max-w-6xl mx-auto px-6">
             <h2 class="text-3xl font-bold mb-12 text-center">Technical Arsenal</h2>
@@ -163,7 +191,6 @@
         </div>
     </section>
 
-    <!-- Contact -->
     <section id="contact" class="py-24 border-t border-white/5">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold mb-6">Ready to start a project?</h2>
