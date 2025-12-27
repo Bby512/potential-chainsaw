@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue-portfolio | Dev</title>
+    <title>Blue-portfolio | Blade UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -12,19 +12,94 @@
             font-family: 'Inter', sans-serif;
             background-color: #0f1115;
             color: #e0e0e0;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Hide horizontal overflow from blades */
         }
-        .code-font { font-family: 'JetBrains Mono', monospace; }
         
-        /* Glass Effect */
-        .glass-panel {
-            background: rgba(30, 35, 45, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        /* --- THE BLADE NAVIGATION STYLES --- */
+        .blade-nav-container {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem; /* Space between blades */
         }
 
-        /* Animated Grid Background */
+        .blade-item {
+            position: relative;
+            height: 60px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(6, 182, 212, 0.3); /* Cyan border */
+            border-left: none; /* Connect to edge */
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 40px;
+            width: 180px;
+            margin-left: -20px; /* Hide the starting edge off-screen */
+            
+            /* This makes the shape angled like your drawing */
+            transform: skewX(-20deg); 
+            
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Un-skew the content so text is readable */
+        .blade-content {
+            transform: skewX(20deg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        /* HOVER EFFECTS */
+        .blade-item:hover {
+            transform: skewX(-20deg) translateX(15px); /* Slide out */
+            background: rgba(6, 182, 212, 0.15); /* Cyan tint */
+            border-color: #22d3ee;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            width: 200px; /* Grow slightly */
+        }
+
+        .blade-item.active {
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.2), transparent);
+            border-color: #22d3ee;
+            transform: skewX(-20deg) translateX(10px);
+        }
+
+        .blade-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Decorative bar on the right of the blade */
+        .blade-item::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #06b6d4;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .blade-item:hover::after {
+            opacity: 1;
+            box-shadow: 0 0 10px #06b6d4;
+        }
+
+        /* --- END BLADE STYLES --- */
+
+        /* Background Grid */
         .bg-grid {
             background-size: 40px 40px;
             background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
@@ -32,385 +107,155 @@
             mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
         }
 
-        /* Scroll Reveal Animation Classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Cursor Glow */
-        #cursor-glow {
-            pointer-events: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(0,0,0,0) 70%);
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            transition: width 0.2s, height 0.2s;
-        }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f1115; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
-        
-        /* Typing Cursor */
-        .typing-cursor::after {
-            content: '|';
-            animation: blink 1s step-start infinite;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
-<body class="antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
-
-    <div id="cursor-glow"></div>
+<body class="antialiased text-gray-300">
 
     <div class="fixed inset-0 z-[-2] bg-grid pointer-events-none"></div>
 
-    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center mt-2 rounded-xl transition-all duration-300" id="nav-container">
-            <div class="text-xl font-bold tracking-tight flex items-center gap-2 group cursor-pointer">
-                <div class="bg-cyan-500/10 p-2 rounded-lg border border-cyan-500/20 group-hover:border-cyan-500/50 transition-colors">
-                    <i data-lucide="terminal" class="text-cyan-400 w-5 h-5"></i>
-                </div>
-                <span class="group-hover:text-white transition-colors">Blue-<span class="text-cyan-400">folio</span></span>
+    <nav class="blade-nav-container">
+        
+        <a href="#home" class="blade-item active group" id="nav-home">
+            <div class="blade-content">
+                <i data-lucide="home" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
+                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Home</span>
             </div>
-            
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
-                <a href="#home" class="hover:text-cyan-400 transition-colors">Home</a>
-                <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
-                <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
-                <a href="#skills" class="hover:text-cyan-400 transition-colors">Toolkit</a>
-            </div>
+        </a>
 
-            <a href="#contact" class="bg-gradient-to-r from-cyan-700 to-blue-700 hover:from-cyan-600 hover:to-blue-600 text-white px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/30 hover:-translate-y-0.5">
-                Let's Talk
-            </a>
-        </div>
+        <a href="#projects" class="blade-item group" id="nav-projects">
+            <div class="blade-content">
+                <i data-lucide="folder-open" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
+                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Projects</span>
+            </div>
+        </a>
+
+        <a href="#skills" class="blade-item group" id="nav-skills">
+            <div class="blade-content">
+                <i data-lucide="cpu" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
+                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Skills</span>
+            </div>
+        </a>
+
+        <a href="#contact" class="blade-item group" id="nav-contact">
+            <div class="blade-content">
+                <i data-lucide="mail" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
+                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Whatever</span>
+            </div>
+        </a>
+
     </nav>
 
-    <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
-        <div class="text-center max-w-4xl px-6 relative z-10">
-            <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-950/30 border border-blue-500/20 text-blue-300 text-xs font-semibold mb-8 hover:bg-blue-900/40 transition-colors cursor-default">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                Online & Ready for Commissions
-            </div>
+    <main class="pl-0 md:pl-24 transition-all duration-300">
 
-            <h1 class="reveal text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight">
-                I Build 
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-gradient">Experiences</span>
-                <br> Not Just Code.
-            </h1>
-
-            <p class="reveal text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto h-8">
-                <span id="typewriter" class="typing-cursor text-cyan-400 font-mono"></span>
-            </p>
-
-            <div class="reveal flex flex-col md:flex-row gap-4 justify-center items-center">
-                <a href="#projects" class="group bg-white text-black px-8 py-3.5 rounded-lg font-bold hover:bg-gray-100 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]">
-                    See My Work 
-                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                </a>
-                <a href="#contact" class="px-8 py-3.5 rounded-lg font-bold text-gray-300 hover:text-white border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all">
-                    Copy Discord ID
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="py-20 relative">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="glass-panel rounded-2xl p-8 md:p-12 reveal border-l-4 border-l-cyan-500">
-                <div class="flex flex-col md:flex-row gap-10 items-start">
-                    <div class="flex-1">
-                        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                            <i data-lucide="user" class="text-cyan-400"></i> About Me
-                        </h2>
-                        <p class="text-gray-400 leading-relaxed mb-6">
-                            Hey! I'm "Blue". I'm not just a script writer; I'm a game designer at heart. I specialize in taking complex ideas—like custom physics engines or intricate UI systems—and turning them into smooth, playable experiences on Roblox.
-                        </p>
-                        <p class="text-gray-400 leading-relaxed">
-                            When I'm not coding, I'm usually analyzing game mechanics in other titles or optimizing my own workflow. I believe communication is just as important as clean code.
-                        </p>
-                    </div>
-                    <div class="w-full md:w-1/3 grid grid-cols-1 gap-4">
-                        <div class="bg-black/20 p-4 rounded-lg border border-white/5">
-                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold">Years Active</span>
-                            <div class="text-2xl font-bold text-white mt-1">3+ Years</div>
-                        </div>
-                        <div class="bg-black/20 p-4 rounded-lg border border-white/5">
-                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold">Response Time</span>
-                            <div class="text-2xl font-bold text-cyan-400 mt-1">&lt; 24 Hrs</div>
-                        </div>
-                        <div class="bg-black/20 p-4 rounded-lg border border-white/5">
-                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold">Favorite Stack</span>
-                            <div class="text-lg font-bold text-white mt-1 flex gap-2">
-                                <i data-lucide="code-2" size="18"></i> Luau + Rojo
-                            </div>
-                        </div>
-                    </div>
+        <section id="home" class="min-h-screen flex items-center justify-center relative">
+            <div class="text-center max-w-4xl px-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-blue-900/30 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-6">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    System Online
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects" class="py-24">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex items-end justify-between mb-12 reveal">
-                <div>
-                    <h2 class="text-3xl font-bold">Selected Works</h2>
-                    <p class="text-gray-500 mt-2">A collection of mechanics and systems.</p>
-                </div>
-                <div class="hidden md:block text-xs font-mono text-cyan-500 bg-cyan-950/30 px-3 py-1 rounded border border-cyan-500/20">
-                    // Drag to tilt cards
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                <div class="tilt-card group cursor-pointer reveal transition-transform duration-300">
-                    <div class="glass-panel rounded-xl overflow-hidden h-full border border-white/5 group-hover:border-cyan-500/40 transition-colors relative">
-                        <div class="aspect-video bg-gray-900 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black flex items-center justify-center">
-                                <i data-lucide="play-circle" class="text-white/20 w-16 h-16 group-hover:text-cyan-400 group-hover:scale-110 transition-all duration-300"></i>
-                            </div>
-                            <div class="absolute top-3 right-3 z-20">
-                                <span class="bg-black/60 backdrop-blur-md text-white px-2 py-1 rounded text-xs font-mono border border-white/10">v2.0</span>
-                            </div>
-                        </div>
-
-                        <div class="p-6 relative">
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">Ragdoll Physics</h3>
-                            <p class="text-sm text-gray-400 mb-4">A custom-built IK-based ragdoll system that reacts to environmental velocity and impacts.</p>
-                            
-                            <div class="flex flex-wrap gap-2">
-                                <span class="text-xs font-medium text-cyan-300 bg-cyan-900/20 px-2 py-1 rounded border border-cyan-700/30">Physics</span>
-                                <span class="text-xs font-medium text-cyan-300 bg-cyan-900/20 px-2 py-1 rounded border border-cyan-700/30">Math</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tilt-card group cursor-pointer reveal transition-transform duration-300" style="transition-delay: 100ms;">
-                    <div class="glass-panel rounded-xl overflow-hidden h-full border border-white/5 group-hover:border-orange-500/40 transition-colors relative">
-                        <div class="aspect-video bg-gray-900 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black flex items-center justify-center">
-                                <i data-lucide="circle-dashed" class="text-white/20 w-16 h-16 group-hover:text-orange-400 group-hover:scale-110 transition-all duration-300"></i>
-                            </div>
-                        </div>
-
-                        <div class="p-6 relative">
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-orange-400 transition-colors">Hole Mechanics</h3>
-                            <p class="text-sm text-gray-400 mb-4">Dynamic geometry modification system allowing players to create holes in surfaces real-time.</p>
-                            
-                            <div class="flex flex-wrap gap-2">
-                                <span class="text-xs font-medium text-orange-300 bg-orange-900/20 px-2 py-1 rounded border border-orange-700/30">CSG</span>
-                                <span class="text-xs font-medium text-orange-300 bg-orange-900/20 px-2 py-1 rounded border border-orange-700/30">Optimization</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tilt-card group cursor-pointer reveal transition-transform duration-300" style="transition-delay: 200ms;">
-                    <div class="glass-panel rounded-xl overflow-hidden h-full border border-dashed border-gray-700 hover:border-gray-500 transition-colors flex flex-col items-center justify-center p-8 text-center bg-transparent">
-                         <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-white/10 transition-colors">
-                            <i data-lucide="plus" class="text-gray-400 group-hover:text-white"></i>
-                         </div>
-                         <h3 class="text-lg font-bold text-gray-300">Your Project Here?</h3>
-                         <p class="text-sm text-gray-500 mt-2">I'm currently accepting new commissions for Q1 2025.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="py-24 bg-black/20">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-12 text-center reveal">My Arsenal</h2>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="reveal glass-panel p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300 border-t-2 border-t-transparent hover:border-t-blue-500">
-                    <div class="bg-blue-500/10 w-12 h-12 mx-auto rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-500/20 transition-colors">
-                        <i data-lucide="code-2" class="text-blue-400"></i>
-                    </div>
-                    <h4 class="font-bold mb-1">Luau Scripting</h4>
-                    <p class="text-xs text-gray-500">Clean & Modular</p>
-                </div>
-                
-                <div class="reveal glass-panel p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300 border-t-2 border-t-transparent hover:border-t-cyan-500" style="transition-delay: 100ms;">
-                    <div class="bg-cyan-500/10 w-12 h-12 mx-auto rounded-lg flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors">
-                        <i data-lucide="box" class="text-cyan-400"></i>
-                    </div>
-                    <h4 class="font-bold mb-1">Physics</h4>
-                    <p class="text-xs text-gray-500">Custom Systems</p>
-                </div>
-
-                <div class="reveal glass-panel p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300 border-t-2 border-t-transparent hover:border-t-purple-500" style="transition-delay: 200ms;">
-                    <div class="bg-purple-500/10 w-12 h-12 mx-auto rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
-                        <i data-lucide="layout" class="text-purple-400"></i>
-                    </div>
-                    <h4 class="font-bold mb-1">UI Design</h4>
-                    <p class="text-xs text-gray-500">Tweening & Layout</p>
-                </div>
-
-                <div class="reveal glass-panel p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300 border-t-2 border-t-transparent hover:border-t-green-500" style="transition-delay: 300ms;">
-                    <div class="bg-green-500/10 w-12 h-12 mx-auto rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-500/20 transition-colors">
-                        <i data-lucide="server" class="text-green-400"></i>
-                    </div>
-                    <h4 class="font-bold mb-1">Datastores</h4>
-                    <p class="text-xs text-gray-500">Secure & Efficient</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-24 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-cyan-900/10 pointer-events-none"></div>
-        
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <div class="reveal">
-                <h2 class="text-4xl font-bold mb-6">Got an idea?</h2>
-                <p class="text-gray-400 mb-10 max-w-xl mx-auto">
-                    Whether it's a small script fix or a full game system, I'm ready to help you build it. 
-                    <span class="text-cyan-400 font-bold block mt-2">Starting at 300 Robux / $5 USD</span>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+                    BLUE-<span class="text-cyan-400">FOLIO</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-8 font-mono">
+                    <span class="text-cyan-500">></span> initialize_game_dev.exe
                 </p>
+            </div>
+        </section>
 
-                <div class="flex justify-center gap-4">
-                    <a href="https://x.com/Sumatr574140" class="glass-panel px-8 py-4 rounded-xl inline-flex items-center gap-3 hover:bg-white/10 hover:scale-105 transition-all group">
-                        <i data-lucide="twitter" class="text-blue-400 group-hover:text-white transition-colors"></i>
-                        <span class="font-bold">DM on Twitter</span>
-                    </a>
-                    <a href="#" class="glass-panel px-8 py-4 rounded-xl inline-flex items-center gap-3 hover:bg-white/10 hover:scale-105 transition-all group">
-                        <i data-lucide="mail" class="text-gray-400 group-hover:text-white transition-colors"></i>
-                        <span class="font-bold">Email Me</span>
-                    </a>
+        <section id="projects" class="py-24 bg-black/20">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-3xl font-bold mb-12 border-l-4 border-cyan-500 pl-4">Selected Works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <div class="bg-gray-900/50 border border-white/10 rounded-sm overflow-hidden hover:border-cyan-500/50 transition-all hover:transform hover:-translate-y-1 group">
+                        <div class="h-48 bg-gray-800 flex items-center justify-center relative overflow-hidden">
+                             <div class="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-purple-900/20"></div>
+                             <i data-lucide="gamepad-2" class="text-white/10 w-20 h-20 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-200">Ragdoll System</h3>
+                            <p class="text-sm text-gray-500 mt-2">Custom physics implementation for Roblox.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900/50 border border-white/10 rounded-sm overflow-hidden hover:border-cyan-500/50 transition-all hover:transform hover:-translate-y-1 group">
+                        <div class="h-48 bg-gray-800 flex items-center justify-center relative overflow-hidden">
+                             <div class="absolute inset-0 bg-gradient-to-br from-orange-900/20 to-red-900/20"></div>
+                             <i data-lucide="crosshair" class="text-white/10 w-20 h-20 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-200">FPS Engine</h3>
+                            <p class="text-sm text-gray-500 mt-2">High performance raycasting framework.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </section>
 
-            <p class="text-gray-700 text-sm mt-24 font-mono reveal">
-                &copy; i dont have this site trademarked (feel free to steal the code)
-            </p>
-        </div>
-    </section>
+        <section id="skills" class="py-24">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-3xl font-bold mb-12 border-l-4 border-purple-500 pl-4">Skills Data</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-gray-900/40 border border-white/5 p-6 rounded-sm hover:bg-white/5 transition-colors">
+                        <h4 class="font-bold text-cyan-400">LUAU</h4>
+                        <div class="w-full bg-gray-700 h-1 mt-2 rounded-full overflow-hidden">
+                            <div class="bg-cyan-400 h-full w-[95%]"></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900/40 border border-white/5 p-6 rounded-sm hover:bg-white/5 transition-colors">
+                        <h4 class="font-bold text-purple-400">UI/UX</h4>
+                        <div class="w-full bg-gray-700 h-1 mt-2 rounded-full overflow-hidden">
+                            <div class="bg-purple-400 h-full w-[85%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 border-t border-white/5 bg-black/40">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-6">Whatever Else</h2>
+                <p class="text-gray-500 mb-8">Just hit me up if you need code.</p>
+                <a href="#" class="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-sm font-bold transition-all">
+                    <i data-lucide="twitter"></i> Message Me
+                </a>
+            </div>
+        </section>
+
+    </main>
 
     <script>
-        // Initialize Icons
         lucide.createIcons();
 
-        // 1. Navbar Blur Effect on Scroll
+        // Highlight active blade on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.blade-item');
+
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('nav-container');
-            if (window.scrollY > 50) {
-                nav.classList.add('glass-panel', 'shadow-lg');
-                nav.classList.remove('mt-4');
-            } else {
-                nav.classList.remove('glass-panel', 'shadow-lg');
-                nav.classList.add('mt-4');
-            }
-        });
-
-        // 2. Scroll Reveal Animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Only animate once
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 300) {
+                    current = section.getAttribute('id');
                 }
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // 3. Typewriter Effect
-        const textElement = document.getElementById('typewriter');
-        const phrases = [
-            "Scripting secure datastores...", 
-            "Simulating physics engines...", 
-            "Designing clean UIs...", 
-            "Making things fun."
-        ];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function type() {
-            const currentPhrase = phrases[phraseIndex];
-            
-            if (isDeleting) {
-                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            let typeSpeed = isDeleting ? 50 : 100;
-
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                typeSpeed = 2000; // Pause at end
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                typeSpeed = 500; // Pause before new phrase
-            }
-
-            setTimeout(type, typeSpeed);
-        }
-
-        document.addEventListener('DOMContentLoaded', type);
-
-        // 4. Mouse Glow Effect
-        const cursorGlow = document.getElementById('cursor-glow');
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            cursorGlow.style.left = x + 'px';
-            cursorGlow.style.top = y + 'px';
-        });
-
-        // 5. 3D Tilt Effect for Cards (Vanilla JS, no library needed)
-        const cards = document.querySelectorAll('.tilt-card');
-
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg rotation
-                const rotateY = ((x - centerX) / centerX) * 5;
-
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
             });
         });
-
     </script>
 </body>
 </html>
