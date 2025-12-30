@@ -1,261 +1,431 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue-portfolio | Blade UI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f1115;
-            color: #e0e0e0;
-            overflow-x: hidden; /* Hide horizontal overflow from blades */
-        }
-        
-        /* --- THE BLADE NAVIGATION STYLES --- */
-        .blade-nav-container {
-            position: fixed;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem; /* Space between blades */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .blade-item {
-            position: relative;
-            height: 60px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(6, 182, 212, 0.3); /* Cyan border */
-            border-left: none; /* Connect to edge */
-            display: flex;
-            align-items: center;
-            padding-left: 20px;
-            padding-right: 40px;
-            width: 180px;
-            margin-left: -20px; /* Hide the starting edge off-screen */
-            
-            /* This makes the shape angled like your drawing */
-            transform: skewX(-20deg); 
-            
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-        }
+  <title>Bluefolio | Gameplay / Systems Dev</title>
+  <meta name="description" content="Gameplay + systems dev. Physics, UI, tools, and performance. Demos included. DM me on X." />
 
-        /* Un-skew the content so text is readable */
-        .blade-content {
-            transform: skewX(20deg);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-        /* HOVER EFFECTS */
-        .blade-item:hover {
-            transform: skewX(-20deg) translateX(15px); /* Slide out */
-            background: rgba(6, 182, 212, 0.15); /* Cyan tint */
-            border-color: #22d3ee;
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
-            width: 200px; /* Grow slightly */
-        }
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;     /* light theme */
+      color: #0f172a;          /* slate */
+      overflow-x: hidden;
+    }
 
-        .blade-item.active {
-            background: linear-gradient(90deg, rgba(6, 182, 212, 0.2), transparent);
-            border-color: #22d3ee;
-            transform: skewX(-20deg) translateX(10px);
-        }
+    /* subtle grid */
+    .bg-grid {
+      background-size: 44px 44px;
+      background-image:
+        linear-gradient(to right, rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+      mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+      opacity: 0.6;
+    }
 
-        .blade-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    /* --- BLADE NAV (LIGHT) --- */
+    .blade-nav-container {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
 
-        /* Decorative bar on the right of the blade */
-        .blade-item::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #06b6d4;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-        .blade-item:hover::after {
-            opacity: 1;
-            box-shadow: 0 0 10px #06b6d4;
-        }
+    .blade-item {
+      position: relative;
+      height: 58px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(8, 145, 178, 0.25);  /* cyan-ish */
+      border-left: none;
+      display: flex;
+      align-items: center;
+      padding-left: 18px;
+      padding-right: 40px;
+      width: 190px;
+      margin-left: -22px;
 
-        /* --- END BLADE STYLES --- */
+      transform: skewX(-20deg);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
 
-        /* Background Grid */
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        }
+      box-shadow: 8px 10px 22px rgba(15, 23, 42, 0.10);
+      backdrop-filter: blur(6px);
+    }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f1115; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
-    </style>
+    .blade-content {
+      transform: skewX(20deg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .blade-item:hover {
+      transform: skewX(-20deg) translateX(14px);
+      background: rgba(8, 145, 178, 0.10);
+      border-color: rgba(8, 145, 178, 0.55);
+      box-shadow: 0 0 0 rgba(0,0,0,0), 8px 12px 24px rgba(8, 145, 178, 0.18);
+      width: 210px;
+    }
+
+    .blade-item.active {
+      background: linear-gradient(90deg, rgba(8, 145, 178, 0.16), rgba(255,255,255,0.65));
+      border-color: rgba(8, 145, 178, 0.7);
+      transform: skewX(-20deg) translateX(10px);
+    }
+
+    .blade-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+      color: #0f172a;
+    }
+
+    .blade-item::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #0891b2;
+      opacity: 0.55;
+      transition: opacity 0.25s;
+    }
+
+    .blade-item:hover::after {
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(8, 145, 178, 0.45);
+    }
+
+    /* Custom Scrollbar (light) */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0891b2; }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
 </head>
-<body class="antialiased text-gray-300">
 
-    <div class="fixed inset-0 z-[-2] bg-grid pointer-events-none"></div>
+<body class="antialiased text-slate-800">
+  <div class="fixed inset-0 z-[-2] bg-grid pointer-events-none"></div>
 
-    <nav class="blade-nav-container">
-        
-        <a href="#home" class="blade-item active group" id="nav-home">
-            <div class="blade-content">
-                <i data-lucide="home" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
-                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Home</span>
+  <!-- Mobile top nav (because blades on phones = chaos) -->
+  <header class="md:hidden sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="mono font-bold tracking-wide">
+        BLUE<span class="text-cyan-700">FOLIO</span>
+      </div>
+      <a href="#contact" class="text-sm px-3 py-1.5 rounded-sm bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition">
+        Contact
+      </a>
+    </div>
+  </header>
+
+  <!-- Blade nav -->
+  <nav class="blade-nav-container hidden md:flex" aria-label="Primary">
+    <a href="#home" class="blade-item active group" id="nav-home">
+      <div class="blade-content">
+        <i data-lucide="home" class="text-cyan-700 w-5 h-5"></i>
+        <span class="blade-text">Home</span>
+      </div>
+    </a>
+
+    <a href="#projects" class="blade-item group" id="nav-projects">
+      <div class="blade-content">
+        <i data-lucide="folder-open" class="text-cyan-700 w-5 h-5"></i>
+        <span class="blade-text">Projects</span>
+      </div>
+    </a>
+
+    <a href="#skills" class="blade-item group" id="nav-skills">
+      <div class="blade-content">
+        <i data-lucide="cpu" class="text-cyan-700 w-5 h-5"></i>
+        <span class="blade-text">Skills</span>
+      </div>
+    </a>
+
+    <a href="#contact" class="blade-item group" id="nav-contact">
+      <div class="blade-content">
+        <i data-lucide="twitter" class="text-cyan-700 w-5 h-5"></i>
+        <span class="blade-text">Contact</span>
+      </div>
+    </a>
+  </nav>
+
+  <main class="pl-0 md:pl-24 transition-all duration-300">
+
+    <!-- HOME -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative">
+      <div class="max-w-6xl w-full px-6 py-16">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-white/80 border border-slate-200 text-slate-700 text-xs font-semibold mb-6">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-600 opacity-30"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-700"></span>
+            </span>
+            Available • Demos included • DM on X
+          </div>
+
+          <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tight text-slate-900">
+            BLUE-<span class="text-cyan-700">FOLIO</span>
+          </h1>
+
+          <p class="text-lg md:text-xl text-slate-600 mb-4 mono">
+            <span class="text-cyan-700">></span> gameplay systems • physics • UI • tools • performance
+          </p>
+
+          <p class="text-slate-700 mb-8 leading-relaxed">
+            I build systems that feel good and don’t fall apart the moment you stress test them.
+            Scroll down — demos are the whole point.
+          </p>
+
+          <div class="flex flex-wrap gap-3">
+            <a href="#projects" class="inline-flex items-center gap-2 bg-cyan-700 hover:bg-cyan-600 text-white px-5 py-3 rounded-sm font-bold transition-all shadow-sm">
+              <i data-lucide="play" class="w-5 h-5"></i> Watch demos
+            </a>
+
+            <a href="https://x.com/Sumatr574140" target="_blank" rel="noreferrer"
+               class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 px-5 py-3 rounded-sm font-bold transition-all shadow-sm">
+              <i data-lucide="twitter" class="w-5 h-5"></i> DM me on X
+            </a>
+          </div>
+
+          <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white/85 border border-slate-200 rounded-sm p-4 shadow-sm">
+              <div class="text-xs text-slate-500 mono">What I ship</div>
+              <div class="text-base font-bold text-slate-900">Working system + demo</div>
             </div>
-        </a>
-
-        <a href="#projects" class="blade-item group" id="nav-projects">
-            <div class="blade-content">
-                <i data-lucide="folder-open" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
-                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Projects</span>
+            <div class="bg-white/85 border border-slate-200 rounded-sm p-4 shadow-sm">
+              <div class="text-xs text-slate-500 mono">Style</div>
+              <div class="text-base font-bold text-slate-900">Clean + readable</div>
             </div>
-        </a>
-
-        <a href="#skills" class="blade-item group" id="nav-skills">
-            <div class="blade-content">
-                <i data-lucide="cpu" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
-                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Skills</span>
+            <div class="bg-white/85 border border-slate-200 rounded-sm p-4 shadow-sm">
+              <div class="text-xs text-slate-500 mono">Focus</div>
+              <div class="text-base font-bold text-slate-900">Feel + performance</div>
             </div>
-        </a>
+          </div>
 
-        <a href="#contact" class="blade-item group" id="nav-contact">
-            <div class="blade-content">
-                <i data-lucide="mail" class="text-cyan-400 w-5 h-5 group-hover:text-white transition-colors"></i>
-                <span class="blade-text text-cyan-400 group-hover:text-white transition-colors">Whatever</span>
+          <div class="mt-8 text-sm text-slate-500 mono">
+            <span class="text-cyan-700">></span> If you only read one section, make it Projects.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="py-24 bg-white/40 border-y border-slate-200">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="flex items-end justify-between gap-4 mb-12">
+          <h2 class="text-3xl font-bold border-l-4 border-cyan-700 pl-4 text-slate-900">Selected Works</h2>
+          <div class="hidden md:block text-sm text-slate-500 mono">
+            <span class="text-cyan-700">></span> Put your demo links in the buttons below.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- CARD 1 -->
+          <article class="bg-white/90 border border-slate-200 rounded-sm overflow-hidden hover:border-cyan-700/60 transition-all hover:-translate-y-1 shadow-sm">
+            <div class="h-44 bg-slate-50 flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-cyan-100/60 to-white"></div>
+              <i data-lucide="activity" class="text-slate-200 w-20 h-20"></i>
             </div>
-        </a>
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-slate-900">Ragdoll System</h3>
+              <p class="text-sm text-slate-600 mt-2">Physics-based ragdoll with clean transitions + recovery.</p>
 
-    </nav>
+              <div class="flex flex-wrap gap-2 mt-4">
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">physics</span>
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">stability</span>
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">edge cases</span>
+              </div>
 
-    <main class="pl-0 md:pl-24 transition-all duration-300">
-
-        <section id="home" class="min-h-screen flex items-center justify-center relative">
-            <div class="text-center max-w-4xl px-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-blue-900/30 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-6">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                    </span>
-                    System Online
+              <details class="mt-4">
+                <summary class="cursor-pointer select-none text-sm font-semibold text-slate-800 hover:text-slate-900">
+                  What’s inside
+                </summary>
+                <div class="mt-2 text-sm text-slate-600 leading-relaxed">
+                  - stable constraints + reset flow<br>
+                  - handles weird states (respawn / interruptions)<br>
+                  - tuned so it feels “real” not “noodle man”
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-                    BLUE-<span class="text-cyan-400">FOLIO</span>
-                </h1>
-                <p class="text-xl text-gray-400 mb-8 font-mono">
-                    <span class="text-cyan-500">></span> initialize_game_dev.exe
-                </p>
-            </div>
-        </section>
+              </details>
 
-        <section id="projects" class="py-24 bg-black/20">
-            <div class="max-w-6xl mx-auto px-6">
-                <h2 class="text-3xl font-bold mb-12 border-l-4 border-cyan-500 pl-4">Selected Works</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <div class="bg-gray-900/50 border border-white/10 rounded-sm overflow-hidden hover:border-cyan-500/50 transition-all hover:transform hover:-translate-y-1 group">
-                        <div class="h-48 bg-gray-800 flex items-center justify-center relative overflow-hidden">
-                             <div class="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-purple-900/20"></div>
-                             <i data-lucide="gamepad-2" class="text-white/10 w-20 h-20 group-hover:scale-110 transition-transform duration-500"></i>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-200">Ragdoll System</h3>
-                            <p class="text-sm text-gray-500 mt-2">Custom physics implementation for Roblox.</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-900/50 border border-white/10 rounded-sm overflow-hidden hover:border-cyan-500/50 transition-all hover:transform hover:-translate-y-1 group">
-                        <div class="h-48 bg-gray-800 flex items-center justify-center relative overflow-hidden">
-                             <div class="absolute inset-0 bg-gradient-to-br from-orange-900/20 to-red-900/20"></div>
-                             <i data-lucide="crosshair" class="text-white/10 w-20 h-20 group-hover:scale-110 transition-transform duration-500"></i>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-200">FPS Engine</h3>
-                            <p class="text-sm text-gray-500 mt-2">High performance raycasting framework.</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="py-24">
-            <div class="max-w-6xl mx-auto px-6">
-                <h2 class="text-3xl font-bold mb-12 border-l-4 border-purple-500 pl-4">Skills Data</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-gray-900/40 border border-white/5 p-6 rounded-sm hover:bg-white/5 transition-colors">
-                        <h4 class="font-bold text-cyan-400">LUAU</h4>
-                        <div class="w-full bg-gray-700 h-1 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-cyan-400 h-full w-[95%]"></div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-900/40 border border-white/5 p-6 rounded-sm hover:bg-white/5 transition-colors">
-                        <h4 class="font-bold text-purple-400">UI/UX</h4>
-                        <div class="w-full bg-gray-700 h-1 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-purple-400 h-full w-[85%]"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="py-24 border-t border-white/5 bg-black/40">
-            <div class="max-w-4xl mx-auto px-6 text-center">
-                <h2 class="text-3xl font-bold mb-6">Whatever Else</h2>
-                <p class="text-gray-500 mb-8">Just hit me up if you need code.</p>
-                <a href="#" class="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-sm font-bold transition-all">
-                    <i data-lucide="twitter"></i> Message Me
+              <div class="mt-5 flex flex-wrap gap-2">
+                <a href="PASTE_DEMO_LINK_RAGDOLL" target="_blank" rel="noreferrer"
+                   class="inline-flex items-center gap-2 px-3 py-2 rounded-sm bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition">
+                  <i data-lucide="play" class="w-4 h-4"></i> Demo
                 </a>
+              </div>
             </div>
-        </section>
+          </article>
 
-    </main>
+          <!-- CARD 2 -->
+          <article class="bg-white/90 border border-slate-200 rounded-sm overflow-hidden hover:border-cyan-700/60 transition-all hover:-translate-y-1 shadow-sm">
+            <div class="h-44 bg-slate-50 flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-orange-100/60 to-white"></div>
+              <i data-lucide="crosshair" class="text-slate-200 w-20 h-20"></i>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-slate-900">FPS Engine</h3>
+              <p class="text-sm text-slate-600 mt-2">Fast shooting framework with predictable hit logic.</p>
 
-    <script>
-        lucide.createIcons();
+              <div class="flex flex-wrap gap-2 mt-4">
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">raycasts</span>
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">performance</span>
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">consistency</span>
+              </div>
 
-        // Highlight active blade on scroll
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.blade-item');
+              <details class="mt-4">
+                <summary class="cursor-pointer select-none text-sm font-semibold text-slate-800 hover:text-slate-900">
+                  What’s inside
+                </summary>
+                <div class="mt-2 text-sm text-slate-600 leading-relaxed">
+                  - modular pipeline (fire/reload/spread)<br>
+                  - clean interfaces to add weapons fast<br>
+                  - tuned for “feels right” + “runs fast”
+                </div>
+              </details>
 
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 300) {
-                    current = section.getAttribute('id');
-                }
-            });
+              <div class="mt-5 flex flex-wrap gap-2">
+                <a href="PASTE_DEMO_LINK_FPS" target="_blank" rel="noreferrer"
+                   class="inline-flex items-center gap-2 px-3 py-2 rounded-sm bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition">
+                  <i data-lucide="play" class="w-4 h-4"></i> Demo
+                </a>
+              </div>
+            </div>
+          </article>
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
+          <!-- CARD 3 (OPTIONAL SLOT) -->
+          <article class="bg-white/90 border border-slate-200 rounded-sm overflow-hidden hover:border-cyan-700/60 transition-all hover:-translate-y-1 shadow-sm">
+            <div class="h-44 bg-slate-50 flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-100/60 to-white"></div>
+              <i data-lucide="layers" class="text-slate-200 w-20 h-20"></i>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-slate-900">Project Slot</h3>
+              <p class="text-sm text-slate-600 mt-2">Put your third demo here (best ones first).</p>
+
+              <div class="flex flex-wrap gap-2 mt-4">
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">feature</span>
+                <span class="text-xs mono px-2 py-1 rounded-sm bg-slate-50 border border-slate-200">system</span>
+              </div>
+
+              <div class="mt-5 flex flex-wrap gap-2">
+                <a href="PASTE_DEMO_LINK_SLOT3" target="_blank" rel="noreferrer"
+                   class="inline-flex items-center gap-2 px-3 py-2 rounded-sm bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition">
+                  <i data-lucide="play" class="w-4 h-4"></i> Demo
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="mt-10 text-sm text-slate-600 bg-white/80 border border-slate-200 rounded-sm p-5 shadow-sm">
+          <div class="mono text-slate-500 mb-2"><span class="text-cyan-700">></span> Quick note</div>
+          Hiring people don’t want “trust me bro” — they want 20 seconds of proof. Keep demos short + obvious.
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="py-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-12 border-l-4 border-purple-600 pl-4 text-slate-900">Skills</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white/85 border border-slate-200 p-6 rounded-sm hover:bg-white transition-colors shadow-sm">
+            <h4 class="font-bold text-cyan-800 mono">Scripting</h4>
+            <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+              <div class="bg-cyan-700 h-full w-[92%]"></div>
+            </div>
+          </div>
+
+          <div class="bg-white/85 border border-slate-200 p-6 rounded-sm hover:bg-white transition-colors shadow-sm">
+            <h4 class="font-bold text-purple-700 mono">UI/UX</h4>
+            <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+              <div class="bg-purple-600 h-full w-[85%]"></div>
+            </div>
+          </div>
+
+          <div class="bg-white/85 border border-slate-200 p-6 rounded-sm hover:bg-white transition-colors shadow-sm">
+            <h4 class="font-bold text-emerald-700 mono">Physics</h4>
+            <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+              <div class="bg-emerald-600 h-full w-[82%]"></div>
+            </div>
+          </div>
+
+          <div class="bg-white/85 border border-slate-200 p-6 rounded-sm hover:bg-white transition-colors shadow-sm">
+            <h4 class="font-bold text-orange-700 mono">Performance</h4>
+            <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+              <div class="bg-orange-600 h-full w-[80%]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-24 border-t border-slate-200 bg-white/40">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold mb-4 text-slate-900">Contact</h2>
+        <p class="text-slate-600 mb-8">
+          If you want something built, DM me on X. Keep it simple: what you need + deadline.
+        </p>
+
+        <a href="https://x.com/Sumatr574140" target="_blank" rel="noreferrer"
+           class="inline-flex items-center gap-2 bg-cyan-700 hover:bg-cyan-600 text-white px-6 py-3 rounded-sm font-bold transition-all shadow-sm">
+          <i data-lucide="twitter" class="w-5 h-5"></i> Message me on X
+        </a>
+
+        <div class="mt-8 text-xs text-slate-500 mono">
+          <span class="text-cyan-700">></span> please don’t open with “yo” :o
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-8 text-center text-xs text-slate-500 mono">
+      © <span id="year"></span> Bluefolio
+    </footer>
+  </main>
+
+  <script>
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Active blade highlighting (IntersectionObserver > scroll spam)
+    const sectionIds = ['home','projects','skills','contact'];
+    const navMap = new Map(sectionIds.map(id => [id, document.querySelector(`#nav-${id}`)]));
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+
+      navMap.forEach(link => link && link.classList.remove('active'));
+      navMap.get(visible.target.id)?.classList.add('active');
+    }, { threshold: [0.25, 0.4, 0.6] });
+
+    sectionIds.forEach(id => {
+      const sec = document.getElementById(id);
+      if (sec) observer.observe(sec);
+    });
+  </script>
 </body>
 </html>
