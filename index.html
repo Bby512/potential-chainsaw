@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>bby512 | Roblox Developer</title>
+  <title>Dingleberry | Roblox Scripter</title>
   <meta name="description" content="Roblox Systems Developer. Combat, Physics, and UI." />
   
   <!-- Tailwind & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -32,12 +32,12 @@
     .bg-glow {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100vh;
-      background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+      background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 60%);
       z-index: -1;
       pointer-events: none;
     }
 
-    /* Refined Blade Nav */
+    /* Blade Nav */
     .blade-nav-container {
       position: fixed; left: 0; top: 50%; transform: translateY(-50%);
       z-index: 50; display: flex; flex-direction: column; gap: 0.8rem;
@@ -67,7 +67,7 @@
     .blade-item:hover i, .blade-item.active i { color: #0b0f19; }
     .blade-item:hover .blade-text, .blade-item.active .blade-text { opacity: 1; color: #0b0f19; }
 
-    /* Video Player - 16:9 Aspect Ratio Lock */
+    /* Video Player */
     .video-wrapper {
       position: relative; width: 100%; padding-top: 56.25%;
       background: #000; border-bottom: 1px solid var(--border);
@@ -89,16 +89,26 @@
       border-color: #475569;
       transform: translateY(-2px);
     }
+    
+    /* Discord Toast Notification */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: #22c55e; color: #000; padding: 10px 20px; border-radius: 50px;
+      font-weight: bold; font-size: 0.9rem; opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   </style>
 </head>
 
 <body class="selection:bg-sky-900 selection:text-sky-100">
   
   <div class="bg-glow"></div>
+  <div id="toast" class="toast">Copied to clipboard!</div>
 
   <!-- Mobile Header -->
   <header class="md:hidden sticky top-0 z-40 bg-[#0b0f19]/90 backdrop-blur border-b border-white/10 p-4 flex justify-between items-center">
-    <div class="font-bold tracking-tight text-lg text-white">bby512</div>
+    <div class="font-bold tracking-tight text-lg text-white">Dingleberry</div>
     <a href="#contact" class="text-xs font-bold bg-white text-black px-4 py-2 rounded hover:bg-slate-200">Contact</a>
   </header>
 
@@ -113,35 +123,45 @@
       <span class="blade-text">Work</span>
     </a>
     <a href="#contact" class="blade-item" id="nav-contact">
-      <div class="blade-icon-wrapper"><i data-lucide="mail" class="w-5 h-5 text-slate-400"></i></div>
-      <span class="blade-text">Contact</span>
+      <div class="blade-icon-wrapper"><i data-lucide="message-square" class="w-5 h-5 text-slate-400"></i></div>
+      <span class="blade-text">Discord</span>
     </a>
   </nav>
 
   <main class="w-full md:pl-24">
     
     <!-- HERO SECTION -->
-    <section id="home" class="min-h-[80vh] flex flex-col justify-center px-6 max-w-4xl mx-auto pt-20">
-      <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6">
-        Roblox Systems <br> Developer.
+    <section id="home" class="min-h-[85vh] flex flex-col justify-center px-6 max-w-4xl mx-auto pt-20">
+      <div class="mb-6">
+         <span class="text-sky-400 font-mono text-sm tracking-wide">
+           // ROBOLOX SCRIPTER
+         </span>
+      </div>
+
+      <h1 class="text-5xl md:text-8xl font-extrabold text-white tracking-tighter mb-6 leading-tight">
+        I script things<br>
+        <span class="text-slate-500">that move.</span>
       </h1>
       
-      <p class="text-lg text-slate-400 max-w-xl leading-relaxed mb-8">
-        I specialize in scripting mechanics that feel responsive and perform well. 
-        Focusing on custom physics, combat systems, and diegetic UI tools.
+      <p class="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed mb-8">
+        I handle the heavy math stuff—custom physics, combat loops, and UI. 
+        I write code that actually runs smooth without breaking the server.
       </p>
 
       <div class="flex flex-wrap gap-4">
-        <a href="#work" class="bg-white text-black font-bold px-6 py-3 rounded hover:bg-slate-200 transition-colors flex items-center gap-2">
-          <i data-lucide="arrow-down" class="w-4 h-4"></i> View Projects
+        <a href="#work" class="bg-white text-black font-bold px-8 py-4 rounded hover:bg-slate-200 transition-colors flex items-center gap-2">
+          View Projects <i data-lucide="arrow-down" class="w-4 h-4"></i>
         </a>
       </div>
     </section>
 
     <!-- PROJECTS SECTION -->
     <section id="work" class="py-20 px-6 max-w-6xl mx-auto border-t border-white/5">
-      <div class="flex items-end justify-between mb-10">
-        <h2 class="text-2xl font-bold text-white">Selected Projects</h2>
+      <div class="flex items-end justify-between mb-12">
+        <div>
+          <h2 class="text-3xl font-bold text-white">The Work</h2>
+          <p class="text-slate-500 mt-2">No tutorials. Just raw mechanics I built.</p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -152,11 +172,11 @@
             <video src="Main%20menu%20and%20combat.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
-            <h3 class="text-lg font-bold text-white mb-2">Combat System & UI</h3>
+            <h3 class="text-xl font-bold text-white mb-2">Combat System & UI</h3>
             <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              A complete loop handling the main menu, character spawning, and melee combat. Includes server-side hit validation and client-side visual effects.
+              A full loop handling the main menu, character spawning, and melee combat. Includes server-side hit validation so exploiters can't reach infinite distance.
             </p>
-            <div class="flex gap-2">
+            <div class="flex gap-2 font-mono">
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Raycasting</span>
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">RemoteEvents</span>
             </div>
@@ -169,11 +189,11 @@
             <video src="Water%20physics.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
-            <h3 class="text-lg font-bold text-white mb-2">Custom Water Physics</h3>
+            <h3 class="text-xl font-bold text-white mb-2">Custom Water Physics</h3>
             <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              Calculates object volume and density to apply realistic buoyancy and drag. Objects bob naturally on waves rather than just floating statically.
+              I got bored of default terrain water. This uses volume calculations to handle drag and buoyancy. Objects bob naturally on waves instead of just freezing.
             </p>
-            <div class="flex gap-2">
+            <div class="flex gap-2 font-mono">
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Physics</span>
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Vector3</span>
             </div>
@@ -186,33 +206,33 @@
             <video src="Ragdoll.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
-            <h3 class="text-lg font-bold text-white mb-2">Active Ragdoll</h3>
+            <h3 class="text-xl font-bold text-white mb-2">Active Ragdoll</h3>
             <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              A character controller that blends animation with physics constraints, allowing for realistic reactions to impacts while maintaining balance.
+              Physics-driven character that tries to balance itself. It reacts to impacts naturally but keeps the player in control so it doesn't feel like a noodle.
             </p>
-            <div class="flex gap-2">
+            <div class="flex gap-2 font-mono">
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Constraints</span>
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Motor6D</span>
             </div>
           </div>
         </article>
 
-        <!-- Project 4: Text System (With Download) -->
+        <!-- Project 4: Text System -->
         <article class="glass-card group">
           <div class="video-wrapper">
             <video src="DihhAhhtext.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
             <div class="flex justify-between items-start mb-2">
-              <h3 class="text-lg font-bold text-white">Diegetic Text Module</h3>
-              <a href="Diegetic Text System.rbxl" download class="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded flex items-center gap-1 transition-colors">
-                <i data-lucide="download" class="w-3 h-3"></i> Model
+              <h3 class="text-xl font-bold text-white">Diegetic Text Module</h3>
+              <a href="Diegetic Text System.rbxl" download class="text-xs bg-sky-600/20 hover:bg-sky-600/40 text-sky-300 px-3 py-1.5 rounded flex items-center gap-2 transition-colors font-bold border border-sky-600/30">
+                <i data-lucide="download" class="w-3 h-3"></i> DOWNLOAD MODEL
               </a>
             </div>
             <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              A utility for rendering text elements in the 3D world space. Useful for damage numbers, dialogue bubbles, or in-world interaction prompts.
+              A utility for rendering text in 3D space. Useful for damage numbers or dialogue bubbles. Clean API, easy to drop into any game.
             </p>
-            <div class="flex gap-2">
+            <div class="flex gap-2 font-mono">
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">ModuleScript</span>
               <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Tool</span>
             </div>
@@ -222,45 +242,34 @@
       </div>
     </section>
 
-    <!-- TECHNICAL OVERVIEW -->
-    <section class="py-10 px-6 max-w-4xl mx-auto">
-      <div class="border-t border-white/5 pt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h4 class="text-white font-bold mb-4">Core Competencies</h4>
-          <ul class="space-y-2 text-slate-400 text-sm">
-            <li>• Luau / Roblox API</li>
-            <li>• Knit Framework Structure</li>
-            <li>• DataStore & ProfileService</li>
-            <li>• Replication & Networking</li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-white font-bold mb-4">Focus Areas</h4>
-          <ul class="space-y-2 text-slate-400 text-sm">
-            <li>• Game Mechanics & Systems</li>
-            <li>• Physics Interactions</li>
-            <li>• User Interface (Fusion/Roact)</li>
-            <li>• Tool Development</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- CONTACT -->
-    <section id="contact" class="py-24 px-6 text-center border-t border-white/5 bg-[#0b0f19]">
+    <section id="contact" class="py-32 px-6 text-center border-t border-white/5 bg-[#0b0f19]">
       <div class="max-w-2xl mx-auto">
-        <h2 class="text-3xl font-bold text-white mb-4">Let's work together.</h2>
-        <p class="text-slate-400 mb-8">
-          I am currently open for commissions and long-term scripting roles.
+        <h2 class="text-4xl font-bold text-white mb-6">Need a Scripter?</h2>
+        <p class="text-slate-400 mb-10 text-lg">
+          I'm open for commissions. Send me a DM with what you need and your budget.
         </p>
         
-        <a href="https://x.com/Sumatr574140" target="_blank" class="inline-flex items-center gap-2 bg-[#1da1f2] hover:bg-[#1a91da] text-white px-6 py-3 rounded font-bold transition-all shadow-lg hover:shadow-[#1da1f2]/20">
-          <i data-lucide="twitter" class="w-5 h-5"></i> Message on X
-        </a>
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+          <!-- X BUTTON -->
+          <a href="https://x.com/Sumatr574140" target="_blank" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#000] border border-white/20 hover:border-white text-white px-8 py-4 rounded font-bold transition-all">
+            <i data-lucide="twitter" class="w-5 h-5"></i> DM on X
+          </a>
+          
+          <!-- DISCORD COPY BUTTON -->
+          <button onclick="copyDiscord()" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white px-8 py-4 rounded font-bold transition-all shadow-lg hover:shadow-[#5865F2]/20 group">
+            <i data-lucide="message-square" class="w-5 h-5"></i> 
+            <span id="discord-text">Copy Discord</span>
+          </button>
+        </div>
+
+        <div class="mt-8 text-sm text-slate-500 font-mono">
+          Discord: <span class="text-slate-300 select-all">Dingeberry_was_here</span>
+        </div>
       </div>
 
-      <footer class="mt-20 text-xs text-slate-600 font-mono">
-        &copy; <span id="year"></span> bby512.
+      <footer class="mt-24 text-xs text-slate-700 font-mono">
+        &copy; <span id="year"></span> Dingleberry.
       </footer>
     </section>
 
@@ -269,6 +278,16 @@
   <script>
     lucide.createIcons();
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Copy Discord Function
+    function copyDiscord() {
+      const discordHandle = "Dingeberry_was_here";
+      navigator.clipboard.writeText(discordHandle).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
+    }
 
     // Scroll Logic
     const sectionIds = ['home','work','contact'];
