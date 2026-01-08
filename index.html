@@ -4,457 +4,1067 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- SEO & Branding -->
-  <title>Bluefolio | Gameplay Engineer</title>
-  <meta name="description" content="Gameplay systems developer specialized in physics, FPS mechanics, and performance optimization." />
+  <!-- SEO & Social -->
+  <title>Your Name | Gameplay & Systems Developer</title>
+  <meta name="description" content="Gameplay systems developer specializing in physics, UI, tools, and performance optimization. Available for hire.">
+  <meta name="keywords" content="game developer, gameplay programmer, Roblox, Unity, systems developer">
+  <meta property="og:title" content="Your Name | Gameplay Developer">
+  <meta property="og:description" content="I build game systems that feel great and perform well.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   
-  <!-- Tailwind CSS (via CDN for Portfolio simplicity) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Icons -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+            'slide-up': 'slideUp 0.5s ease-out',
+            'fade-in': 'fadeIn 0.6s ease-out',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            glow: {
+              '0%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.3)' },
+              '100%': { boxShadow: '0 0 40px rgba(6, 182, 212, 0.6)' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+          },
+        },
+      },
+    }
+  </script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
   <style>
-    /* --- THEME SETUP --- */
-    :root {
-      --primary: #0e7490; /* Cyan-700 */
-      --bg-grid: #cbd5e1; /* Slate-300 */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #0891b2 transparent;
     }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
-      color: #0f172a;
-      overflow-x: hidden;
-    }
-
-    /* --- ANIMATIONS --- */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 4px; }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #06b6d4 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient 3s ease infinite;
     }
     
-    .animate-entry {
-      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0; /* Start hidden */
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    .delay-100 { animation-delay: 0.1s; }
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-300 { animation-delay: 0.3s; }
-
-    /* --- BACKGROUND GRID --- */
-    .bg-grid {
-      background-size: 40px 40px;
-      background-image:
-        linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
-      mask-image: linear-gradient(to bottom, black 40%, transparent 100%); 
-      height: 100vh;
-      width: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
-
-    /* --- BLADE NAVIGATION (Desktop) --- */
-    .blade-nav-container {
-      position: fixed;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      pointer-events: none; /* Let clicks pass through gaps */
+    
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    .blade-item {
-      pointer-events: auto;
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .dark .card-hover:hover {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-container {
       position: relative;
-      height: 56px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(203, 213, 225, 0.6); /* Slate-300 */
-      border-left: none;
-      display: flex;
-      align-items: center;
-      padding-left: 24px;
-      width: 60px; /* Collapsed width */
-      margin-left: -15px; /* Tuck into side */
-      
-      /* The Blade Shape */
-      transform: skewX(-15deg);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      
-      box-shadow: 4px 4px 12px rgba(15, 23, 42, 0.05);
-      backdrop-filter: blur(8px);
       overflow: hidden;
-      cursor: pointer;
+      border-radius: 8px;
     }
-
-    /* Icon correction inside skewed container */
-    .blade-icon-wrapper {
-      transform: skewX(15deg); 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Text hidden by default, shown on hover/active */
-    .blade-text {
-      transform: skewX(15deg);
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      white-space: nowrap;
-      opacity: 0;
-      margin-left: 12px;
-      transition: opacity 0.2s ease;
-    }
-
-    /* Hover State */
-    .blade-item:hover, .blade-item.active {
-      width: 180px; /* Expanded width */
-      background: white;
-      border-color: var(--primary);
-      box-shadow: 6px 6px 20px rgba(14, 116, 144, 0.15);
-      transform: skewX(-15deg) translateX(5px);
-    }
-
-    .blade-item:hover .blade-text, .blade-item.active .blade-text {
-      opacity: 1;
-    }
-
-    .blade-item.active i { color: var(--primary); }
-
-    /* Active Indicator Line */
-    .blade-item::before {
+    
+    .video-container::before {
       content: '';
       position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-      background: var(--primary);
-      opacity: 0;
-      transition: opacity 0.3s;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+      z-index: 1;
+      pointer-events: none;
     }
-    .blade-item.active::before { opacity: 1; }
-
-    /* Typography Utilities */
-    .mono { font-family: 'JetBrains Mono', monospace; }
+    
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .section-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .tech-tag {
+      transition: all 0.2s ease;
+    }
+    
+    .tech-tag:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Animated background grid */
+    .bg-grid-animated {
+      background-size: 50px 50px;
+      background-image:
+        linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+      animation: gridMove 20s linear infinite;
+    }
+    
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+    
+    /* Focus states for accessibility */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #06b6d4;
+      outline-offset: 2px;
+    }
+    
+    /* Print styles */
+    @media print {
+      .no-print { display: none !important; }
+    }
   </style>
 </head>
 
-<body class="antialiased selection:bg-cyan-100 selection:text-cyan-900">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 antialiased transition-colors duration-300">
   
-  <div class="bg-grid"></div>
+  <!-- Animated Background -->
+  <div class="fixed inset-0 bg-grid-animated pointer-events-none opacity-50 dark:opacity-30"></div>
+  
+  <!-- Gradient Orbs (decorative) -->
+  <div class="fixed top-20 left-10 w-72 h-72 bg-cyan-400/20 dark:bg-cyan-400/10 rounded-full blur-3xl pointer-events-none animate-float"></div>
+  <div class="fixed bottom-20 right-10 w-96 h-96 bg-purple-400/20 dark:bg-purple-400/10 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -3s;"></div>
+  
+  <!-- Skip to content (Accessibility) -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-cyan-600 text-white px-4 py-2 rounded-lg z-50">
+    Skip to main content
+  </a>
 
-  <!-- MOBILE HEADER (Visible < md) -->
-  <header class="md:hidden sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
-    <div class="px-6 py-4 flex items-center justify-between">
-      <div class="mono font-bold text-lg tracking-tight">
-        BLUE<span class="text-cyan-700">FOLIO</span>
-      </div>
-      <a href="#contact" class="text-xs font-bold uppercase tracking-wider bg-slate-900 text-white px-4 py-2 rounded-sm hover:bg-slate-800 transition">
-        Hire Me
-      </a>
-    </div>
-  </header>
-
-  <!-- DESKTOP NAVIGATION (Visible >= md) -->
-  <nav class="blade-nav-container hidden md:flex">
-    <a href="#home" class="blade-item active" id="nav-home">
-      <div class="blade-icon-wrapper"><i data-lucide="home" class="w-5 h-5 text-slate-500 transition-colors"></i></div>
-      <span class="blade-text text-slate-800">Start</span>
-    </a>
-    <a href="#projects" class="blade-item" id="nav-projects">
-      <div class="blade-icon-wrapper"><i data-lucide="gamepad-2" class="w-5 h-5 text-slate-500 transition-colors"></i></div>
-      <span class="blade-text text-slate-800">Projects</span>
-    </a>
-    <a href="#skills" class="blade-item" id="nav-skills">
-      <div class="blade-icon-wrapper"><i data-lucide="cpu" class="w-5 h-5 text-slate-500 transition-colors"></i></div>
-      <span class="blade-text text-slate-800">Tech</span>
-    </a>
-    <a href="#contact" class="blade-item" id="nav-contact">
-      <div class="blade-icon-wrapper"><i data-lucide="mail" class="w-5 h-5 text-slate-500 transition-colors"></i></div>
-      <span class="blade-text text-slate-800">Contact</span>
-    </a>
-  </nav>
-
-  <main class="w-full md:pl-24 transition-all duration-300">
-    
-    <!-- === HERO SECTION === -->
-    <section id="home" class="min-h-screen flex flex-col justify-center px-6 py-20 max-w-5xl mx-auto">
-      
-      <div class="animate-entry">
-        <!-- Availability Badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-semibold text-slate-600 mb-8 w-fit">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          Open to Work • Gameplay Programming
-        </div>
-
-        <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] mb-6">
-          Systemic Gameplay <br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">
-            Engineer.
-          </span>
-        </h1>
-
-        <p class="text-lg text-slate-600 max-w-2xl leading-relaxed mb-8">
-          I build scalable game systems, robust physics interactions, and developer tools. 
-          Focusing on <span class="font-semibold text-slate-900">Unity & C#</span>. 
-          My code is clean, documented, and performance-ready.
-        </p>
-
-        <div class="flex flex-wrap gap-4">
-          <a href="#projects" class="group relative px-6 py-3 bg-slate-900 text-white font-bold rounded-sm overflow-hidden transition-all hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5">
-            <span class="relative z-10 flex items-center gap-2">
-              See the Code <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 no-print">
+    <nav class="glass mx-4 mt-4 rounded-2xl shadow-lg">
+      <div class="max-w-6xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <!-- Logo/Name -->
+          <a href="#" class="flex items-center gap-3 group">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform">
+              YN <!-- Your initials -->
+            </div>
+            <span class="font-bold text-lg hidden sm:block">
+              <span class="text-slate-900 dark:text-white">Your</span>
+              <span class="text-cyan-600">Name</span>
             </span>
           </a>
           
-          <a href="https://github.com/bby512" target="_blank" class="px-6 py-3 bg-white border border-slate-300 text-slate-700 font-bold rounded-sm hover:bg-slate-50 transition-all hover:border-slate-400 flex items-center gap-2">
-            <i data-lucide="github" class="w-4 h-4"></i> GitHub
+          <!-- Desktop Nav -->
+          <div class="hidden md:flex items-center gap-1">
+            <a href="#about" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+            <a href="#projects" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Projects</a>
+            <a href="#skills" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Skills</a>
+            <a href="#experience" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Experience</a>
+            <a href="#contact" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Contact</a>
+          </div>
+          
+          <!-- Right side -->
+          <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle dark mode">
+              <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+              <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+            </button>
+            
+            <!-- Resume Download -->
+            <a href="YOUR_RESUME.pdf" download class="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-sm font-semibold hover:bg-slate-700 dark:hover:bg-slate-100 transition-colors">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              Resume
+            </a>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Open menu">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass mx-4 mt-2 rounded-2xl shadow-lg overflow-hidden">
+      <div class="p-4 flex flex-col gap-2">
+        <a href="#about" class="px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">About</a>
+        <a href="#projects" class="px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">Projects</a>
+        <a href="#skills" class="px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">Skills</a>
+        <a href="#experience" class="px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">Experience</a>
+        <a href="#contact" class="px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">Contact</a>
+        <hr class="border-slate-200 dark:border-slate-700 my-2">
+        <a href="YOUR_RESUME.pdf" download class="flex items-center justify-center gap-2 px-4 py-3 bg-cyan-600 text-white rounded-lg font-semibold">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          Download Resume
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    
+    <!-- HERO SECTION -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-24 pb-16 px-6 relative">
+      <div class="max-w-6xl mx-auto w-full">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          
+          <!-- Left: Text Content -->
+          <div class="space-y-8 animate-fade-in">
+            <!-- Status Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-medium">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+              </span>
+              <span class="text-green-600 dark:text-green-400">Available for work</span>
+            </div>
+            
+            <!-- Main Headline -->
+            <div>
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+                Hi, I'm <span class="gradient-text">Your Name</span>
+              </h1>
+              <p class="mt-4 text-xl sm:text-2xl text-slate-600 dark:text-slate-400 font-medium">
+                Gameplay & Systems Developer
+              </p>
+            </div>
+            
+            <!-- Description -->
+            <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+              I build game systems that <strong class="text-slate-900 dark:text-white">feel great</strong> and 
+              <strong class="text-slate-900 dark:text-white">perform well</strong>. 
+              Specializing in physics, combat systems, UI/UX, and optimization.
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap gap-4">
+              <a href="#projects" class="group inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-cyan-600/25 hover:shadow-cyan-600/40">
+                <i data-lucide="play" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                View My Work
+              </a>
+              <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 glass hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-semibold transition-all">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+                Get In Touch
+              </a>
+            </div>
+            
+            <!-- Social Links -->
+            <div class="flex items-center gap-4 pt-4">
+              <span class="text-sm text-slate-500 dark:text-slate-400">Find me on:</span>
+              <div class="flex gap-3">
+                <a href="https://github.com/YOUR_GITHUB" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="GitHub">
+                  <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+                <a href="https://twitter.com/YOUR_TWITTER" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Twitter">
+                  <i data-lucide="twitter" class="w-5 h-5"></i>
+                </a>
+                <a href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="LinkedIn">
+                  <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="https://discord.com/users/YOUR_DISCORD_ID" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Discord">
+                  <i data-lucide="message-circle" class="w-5 h-5"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Profile Image / 3D Element -->
+          <div class="relative flex justify-center lg:justify-end animate-fade-in" style="animation-delay: 0.2s;">
+            <div class="relative">
+              <!-- Decorative rings -->
+              <div class="absolute inset-0 rounded-full border-2 border-cyan-500/20 animate-ping" style="animation-duration: 3s;"></div>
+              <div class="absolute -inset-4 rounded-full border border-purple-500/20 animate-pulse"></div>
+              
+              <!-- Profile Image Container -->
+              <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl relative z-10 bg-gradient-to-br from-cyan-500 to-purple-600">
+                <!-- Replace with your actual photo -->
+                <img 
+                  src="YOUR_PHOTO.jpg" 
+                  alt="Your Name - Gameplay Developer"
+                  class="w-full h-full object-cover"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <!-- Fallback if no image -->
+                <div class="w-full h-full items-center justify-center text-white text-6xl font-bold hidden">
+                  YN
+                </div>
+              </div>
+              
+              <!-- Floating badges -->
+              <div class="absolute -right-4 top-10 glass px-3 py-2 rounded-lg shadow-lg animate-float">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="code-2" class="w-4 h-4 text-cyan-600"></i>
+                  <span class="text-sm font-semibold">3+ Years</span>
+                </div>
+              </div>
+              
+              <div class="absolute -left-4 bottom-20 glass px-3 py-2 rounded-lg shadow-lg animate-float" style="animation-delay: -2s;">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="gamepad-2" class="w-4 h-4 text-purple-600"></i>
+                  <span class="text-sm font-semibold">10+ Projects</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+          <span class="text-sm text-slate-500 dark:text-slate-400">Scroll to explore</span>
+          <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-24 px-6 section-reveal">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          
+          <!-- Left: About Text -->
+          <div class="space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 text-sm font-medium">
+              <i data-lucide="user" class="w-4 h-4"></i>
+              About Me
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+              Building systems that players <span class="text-cyan-600">remember</span>
+            </h2>
+            
+            <div class="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p>
+                I'm a gameplay systems developer with a passion for creating mechanics that feel 
+                intuitive and satisfying. My focus is on the intersection of <strong class="text-slate-900 dark:text-white">game feel</strong> 
+                and <strong class="text-slate-900 dark:text-white">technical performance</strong>.
+              </p>
+              <p>
+                Over the past few years, I've worked on everything from physics-based combat systems 
+                to complex UI frameworks. I believe great game systems should be invisible to players — 
+                they just work, exactly as expected.
+              </p>
+              <p>
+                When I'm not coding, you'll find me analyzing game mechanics, contributing to open-source 
+                tools, or helping other developers in various communities.
+              </p>
+            </div>
+            
+            <!-- Quick facts -->
+            <div class="grid grid-cols-2 gap-4 pt-4">
+              <div class="glass p-4 rounded-xl">
+                <div class="text-2xl font-bold text-cyan-600">3+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Years Experience</div>
+              </div>
+              <div class="glass p-4 rounded-xl">
+                <div class="text-2xl font-bold text-purple-600">10+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Shipped Projects</div>
+              </div>
+              <div class="glass p-4 rounded-xl">
+                <div class="text-2xl font-bold text-emerald-600">5+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Happy Clients</div>
+              </div>
+              <div class="glass p-4 rounded-xl">
+                <div class="text-2xl font-bold text-orange-600">1M+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Players Reached</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: What I Do -->
+          <div class="space-y-4">
+            <div class="glass p-6 rounded-2xl card-hover">
+              <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600">
+                  <i data-lucide="boxes" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg text-slate-900 dark:text-white">Gameplay Systems</h3>
+                  <p class="text-slate-600 dark:text-slate-400 mt-1">Combat, movement, abilities, progression systems that feel responsive and satisfying.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass p-6 rounded-2xl card-hover">
+              <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+                  <i data-lucide="atom" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg text-slate-900 dark:text-white">Physics & Simulation</h3>
+                  <p class="text-slate-600 dark:text-slate-400 mt-1">Ragdolls, projectiles, vehicles, destruction — physics that's stable and performant.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass p-6 rounded-2xl card-hover">
+              <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600">
+                  <i data-lucide="layout" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg text-slate-900 dark:text-white">UI/UX Systems</h3>
+                  <p class="text-slate-600 dark:text-slate-400 mt-1">Animated interfaces, inventory systems, HUDs that are intuitive and accessible.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass p-6 rounded-2xl card-hover">
+              <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-orange-100 dark:bg-orange-900/30 text-orange-600">
+                  <i data-lucide="zap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg text-slate-900 dark:text-white">Performance Optimization</h3>
+                  <p class="text-slate-600 dark:text-slate-400 mt-1">Profiling, optimization, memory management — making games run smooth on all devices.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="py-24 px-6 bg-white/50 dark:bg-slate-800/50 section-reveal">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-sm font-medium mb-4">
+            <i data-lucide="folder-open" class="w-4 h-4"></i>
+            Featured Projects
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+            Work that speaks for itself
+          </h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            Each project includes a playable demo. Watch the videos or try them yourself.
+          </p>
+        </div>
+        
+        <!-- Project Grid -->
+        <div class="grid gap-8">
+          
+          <!-- PROJECT 1 (Featured - Full Width) -->
+          <article class="glass rounded-3xl overflow-hidden card-hover">
+            <div class="grid lg:grid-cols-2">
+              <!-- Video/Demo Side -->
+              <div class="video-container aspect-video lg:aspect-auto bg-gradient-to-br from-cyan-500 to-blue-600 relative">
+                <!-- Replace with actual video embed or GIF -->
+                <video 
+                  class="w-full h-full object-cover"
+                  autoplay 
+                  loop 
+                  muted 
+                  playsinline
+                  poster="project1-thumbnail.jpg"
+                >
+                  <source src="YOUR_DEMO_VIDEO.mp4" type="video/mp4">
+                </video>
+                
+                <!-- Play button overlay (for when video doesn't autoplay) -->
+                <div class="absolute inset-0 flex items-center justify-center z-10 opacity-0 hover:opacity-100 transition-opacity bg-black/30">
+                  <a href="YOUR_PLAYABLE_DEMO_LINK" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-full font-bold shadow-xl hover:scale-105 transition-transform">
+                    <i data-lucide="play" class="w-5 h-5"></i>
+                    Play Demo
+                  </a>
+                </div>
+                
+                <!-- Project type badge -->
+                <div class="absolute top-4 left-4 z-10 px-3 py-1 bg-white/90 dark:bg-slate-900/90 rounded-full text-sm font-semibold">
+                  ⭐ Featured
+                </div>
+              </div>
+              
+              <!-- Info Side -->
+              <div class="p-8 lg:p-10 flex flex-col justify-center">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+                  Ragdoll Physics System
+                </h3>
+                <p class="mt-4 text-slate-600 dark:text-slate-400 leading-relaxed">
+                  A complete physics-based ragdoll system with smooth transitions, recovery animations, 
+                  and edge case handling. Built for a multiplayer combat game with 50+ concurrent players.
+                </p>
+                
+                <!-- Key Features -->
+                <div class="mt-6 space-y-2">
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                    Stable constraints that don't explode
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                    Smooth transition from animated to ragdoll
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                    Recovery system with procedural get-up
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                    Handles respawn, teleport, interruptions
+                  </div>
+                </div>
+                
+                <!-- Tech Stack -->
+                <div class="flex flex-wrap gap-2 mt-6">
+                  <span class="tech-tag px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium">Lua</span>
+                  <span class="tech-tag px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium">Roblox</span>
+                  <span class="tech-tag px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium">Physics</span>
+                  <span class="tech-tag px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium">Animation</span>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3 mt-8">
+                  <a href="YOUR_DEMO_LINK" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-semibold transition-colors">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    Play Demo
+                  </a>
+                  <a href="YOUR_GITHUB_REPO" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 glass hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl font-semibold transition-colors">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    View Code
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+          
+          <!-- PROJECT 2 & 3 (Two Column) -->
+          <div class="grid md:grid-cols-2 gap-8">
+            
+            <!-- PROJECT 2 -->
+            <article class="glass rounded-3xl overflow-hidden card-hover">
+              <div class="video-container aspect-video bg-gradient-to-br from-orange-500 to-red-600">
+                <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="project2-thumbnail.jpg">
+                  <source src="YOUR_DEMO_VIDEO_2.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 flex items-center justify-center z-10 opacity-0 hover:opacity-100 transition-opacity bg-black/30">
+                  <a href="YOUR_DEMO_LINK_2" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-white text-slate-900 rounded-full font-bold shadow-xl hover:scale-105 transition-transform text-sm">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    Play
+                  </a>
+                </div>
+              </div>
+              
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">FPS Combat Engine</h3>
+                <p class="mt-2 text-slate-600 dark:text-slate-400 text-sm">
+                  Modular shooting framework with projectile simulation, hit registration, and weapon customization.
+                </p>
+                
+                <div class="flex flex-wrap gap-2 mt-4">
+                  <span class="tech-tag px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-xs font-medium">Raycasting</span>
+                  <span class="tech-tag px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-xs font-medium">Netcode</span>
+                  <span class="tech-tag px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-xs font-medium">Replication</span>
+                </div>
+                
+                <div class="flex gap-2 mt-4">
+                  <a href="YOUR_DEMO_LINK_2" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-colors text-sm">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    Demo
+                  </a>
+                  <a href="YOUR_GITHUB_2" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-2 glass hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                  </a>
+                </div>
+              </div>
+            </article>
+            
+            <!-- PROJECT 3 -->
+            <article class="glass rounded-3xl overflow-hidden card-hover">
+              <div class="video-container aspect-video bg-gradient-to-br from-purple-500 to-pink-600">
+                <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="project3-thumbnail.jpg">
+                  <source src="YOUR_DEMO_VIDEO_3.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 flex items-center justify-center z-10 opacity-0 hover:opacity-100 transition-opacity bg-black/30">
+                  <a href="YOUR_DEMO_LINK_3" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-white text-slate-900 rounded-full font-bold shadow-xl hover:scale-105 transition-transform text-sm">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    Play
+                  </a>
+                </div>
+              </div>
+              
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Inventory UI System</h3>
+                <p class="mt-2 text-slate-600 dark:text-slate-400 text-sm">
+                  Drag-and-drop inventory with grid management, item stacking, tooltips, and smooth animations.
+                </p>
+                
+                <div class="flex flex-wrap gap-2 mt-4">
+                  <span class="tech-tag px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-xs font-medium">UI/UX</span>
+                  <span class="tech-tag px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-xs font-medium">Animation</span>
+                  <span class="tech-tag px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-xs font-medium">Data</span>
+                </div>
+                
+                <div class="flex gap-2 mt-4">
+                  <a href="YOUR_DEMO_LINK_3" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-colors text-sm">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    Demo
+                  </a>
+                  <a href="YOUR_GITHUB_3" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-2 glass hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+          
+        </div>
+        
+        <!-- View More -->
+        <div class="text-center mt-12">
+          <a href="https://github.com/YOUR_GITHUB" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 glass hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl font-semibold transition-colors">
+            <i data-lucide="github" class="w-5 h-5"></i>
+            View All Projects on GitHub
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </a>
         </div>
       </div>
-
-      <!-- Quick Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 animate-entry delay-200 border-t border-slate-200 pt-8">
-        <div>
-          <div class="text-3xl font-bold text-slate-900 mono">C#</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mt-1">Primary Lang</div>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-slate-900 mono">3+</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mt-1">Years Unity</div>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-slate-900 mono">Physics</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mt-1">Specialty</div>
-        </div>
-      </div>
     </section>
 
-    <!-- === PROJECTS SECTION === -->
-    <section id="projects" class="py-24 bg-white border-y border-slate-200">
-      <div class="max-w-6xl mx-auto px-6">
-        
-        <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 class="text-3xl font-bold text-slate-900">Technical Showcase</h2>
-            <p class="text-slate-500 mt-2">Demos focused on mechanics, not art.</p>
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="py-24 px-6 section-reveal">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-4">
+            <i data-lucide="cpu" class="w-4 h-4"></i>
+            Technical Skills
           </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+            Tools & Technologies
+          </h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            My technical toolkit, organized by what I use daily vs. what I'm proficient in.
+          </p>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-          <!-- PROJECT 1: Ragdoll -->
-          <article class="group bg-slate-50 border border-slate-200 rounded-lg overflow-hidden hover:shadow-xl hover:shadow-slate-200/50 hover:border-cyan-300 transition-all duration-300">
-            <!-- IMAGE PLACEHOLDER: REPLACE THIS DIV WITH AN <img> TAG -->
-            <div class="w-full h-48 bg-slate-200 relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-              <!-- DELETE THIS SVG WHEN YOU ADD IMAGE -->
-              <div class="text-center">
-                <i data-lucide="image" class="w-8 h-8 mx-auto text-slate-400 mb-2"></i>
-                <span class="text-xs text-slate-500 font-mono uppercase">Insert Screenshot</span>
+        
+        <!-- Skills Grid -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Languages -->
+          <div class="glass p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600">
+                <i data-lucide="code-2" class="w-5 h-5"></i>
               </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-60"></div>
-              <div class="absolute bottom-3 left-3">
-                <span class="bg-cyan-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">PHYSICS</span>
-              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white">Languages</h3>
             </div>
-
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors">Active Ragdoll System</h3>
-              <p class="text-sm text-slate-600 mb-4 line-clamp-3">
-                A physics-based character controller that blends animation with ragdoll physics. Handles collision recovery, procedural stumbling, and limb-specific damage.
-              </p>
-              
-              <div class="flex flex-wrap gap-2 mb-6">
-                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600">Unity</span>
-                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600">Configurable Joints</span>
-              </div>
-
-              <div class="flex gap-3">
-                <a href="#" class="flex-1 text-center bg-slate-900 text-white text-sm font-bold py-2 rounded hover:bg-cyan-700 transition-colors">
-                  View Demo
-                </a>
-                <a href="#" class="flex-1 text-center bg-white border border-slate-300 text-slate-700 text-sm font-bold py-2 rounded hover:bg-slate-50 transition-colors">
-                  Source
-                </a>
-              </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Lua</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Luau</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">TypeScript</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">C#</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Python</span>
             </div>
-          </article>
-
-          <!-- PROJECT 2: FPS -->
-          <article class="group bg-slate-50 border border-slate-200 rounded-lg overflow-hidden hover:shadow-xl hover:shadow-slate-200/50 hover:border-cyan-300 transition-all duration-300">
-            <div class="w-full h-48 bg-slate-200 relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-              <div class="text-center">
-                <i data-lucide="image" class="w-8 h-8 mx-auto text-slate-400 mb-2"></i>
-                <span class="text-xs text-slate-500 font-mono uppercase">Insert Screenshot</span>
+          </div>
+          
+          <!-- Engines & Platforms -->
+          <div class="glass p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+                <i data-lucide="gamepad-2" class="w-5 h-5"></i>
               </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-60"></div>
-              <div class="absolute bottom-3 left-3">
-                <span class="bg-orange-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">SYSTEMS</span>
-              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white">Engines</h3>
             </div>
-
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors">Modular FPS Engine</h3>
-              <p class="text-sm text-slate-600 mb-4 line-clamp-3">
-                Highly decoupled weapon system using ScriptableObjects. Features object pooling for projectiles, recoil patterns, and a custom hit-detection validation system.
-              </p>
-              
-              <div class="flex flex-wrap gap-2 mb-6">
-                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600">C# Interfaces</span>
-                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600">Pooling</span>
-              </div>
-
-              <div class="flex gap-3">
-                <a href="#" class="flex-1 text-center bg-slate-900 text-white text-sm font-bold py-2 rounded hover:bg-cyan-700 transition-colors">
-                  View Demo
-                </a>
-                <a href="#" class="flex-1 text-center bg-white border border-slate-300 text-slate-700 text-sm font-bold py-2 rounded hover:bg-slate-50 transition-colors">
-                  Source
-                </a>
-              </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Roblox Studio</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Unity</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Godot</span>
             </div>
-          </article>
-
-          <!-- PROJECT 3: Tools -->
-          <article class="group bg-slate-50 border border-slate-200 rounded-lg overflow-hidden hover:shadow-xl hover:shadow-slate-200/50 hover:border-cyan-300 transition-all duration-300">
-            <div class="w-full h-48 bg-slate-200 relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-               <div class="text-center">
-                <i data-lucide="image" class="w-8 h-8 mx-auto text-slate-400 mb-2"></i>
-                <span class="text-xs text-slate-500 font-mono uppercase">Insert Screenshot</span>
+          </div>
+          
+          <!-- Specializations -->
+          <div class="glass p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-600">
+                <i data-lucide="target" class="w-5 h-5"></i>
               </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-60"></div>
-              <div class="absolute bottom-3 left-3">
-                <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">TOOLS</span>
-              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white">Specializations</h3>
             </div>
-
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors">Level Design Tools</h3>
-              <p class="text-sm text-slate-600 mb-4 line-clamp-3">
-                Custom Unity Editor extensions to speed up level blockouts. Includes a spline-based road generator and an automatic prop scatter tool with physics placement.
-              </p>
-              
-              <div class="flex flex-wrap gap-2 mb-6">
-                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600">Editor Scripting</span>
-                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600">UI Toolkit</span>
-              </div>
-
-              <div class="flex gap-3">
-                <a href="#" class="flex-1 text-center bg-slate-900 text-white text-sm font-bold py-2 rounded hover:bg-cyan-700 transition-colors">
-                  View Demo
-                </a>
-                <a href="#" class="flex-1 text-center bg-white border border-slate-300 text-slate-700 text-sm font-bold py-2 rounded hover:bg-slate-50 transition-colors">
-                  Source
-                </a>
-              </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Physics</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Combat Systems</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">UI/UX</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Optimization</span>
             </div>
-          </article>
-
+          </div>
+          
+          <!-- Tools -->
+          <div class="glass p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600">
+                <i data-lucide="wrench" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white">Tools</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Git</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">VS Code</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Rojo</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Wally</span>
+            </div>
+          </div>
+          
+          <!-- Concepts -->
+          <div class="glass p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/30 text-pink-600">
+                <i data-lucide="brain" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white">Concepts</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">OOP</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">ECS</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">State Machines</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Design Patterns</span>
+            </div>
+          </div>
+          
+          <!-- Soft Skills -->
+          <div class="glass p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600">
+                <i data-lucide="users" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white">Soft Skills</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Communication</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Problem Solving</span>
+              <span class="tech-tag px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-sm font-medium">Documentation</span>
+            </div>
+          </div>
+          
         </div>
       </div>
     </section>
 
-    <!-- === SKILLS SECTION === -->
-    <section id="skills" class="py-20 max-w-5xl mx-auto px-6">
-      <h2 class="text-2xl font-bold text-slate-900 mb-10 border-l-4 border-cyan-600 pl-4">Core Competencies</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-        <!-- Col 1 -->
-        <div>
-          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Engines & Languages</h3>
-          <ul class="space-y-3">
-            <li class="flex items-center justify-between">
-              <span class="font-bold text-slate-700">Unity (C#)</span>
-              <span class="text-xs font-mono bg-cyan-50 text-cyan-700 px-2 py-1 rounded">Advanced</span>
-            </li>
-            <li class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="bg-cyan-600 w-[90%] h-full"></div></li>
+    <!-- EXPERIENCE SECTION -->
+    <section id="experience" class="py-24 px-6 bg-white/50 dark:bg-slate-800/50 section-reveal">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-sm font-medium mb-4">
+            <i data-lucide="briefcase" class="w-4 h-4"></i>
+            Experience
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+            Where I've Worked
+          </h2>
+        </div>
+        
+        <!-- Timeline -->
+        <div class="relative">
+          <!-- Timeline line -->
+          <div class="absolute left-8 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+          
+          <div class="space-y-8">
             
-            <li class="flex items-center justify-between pt-2">
-              <span class="font-bold text-slate-700">C++</span>
-              <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">Intermediate</span>
-            </li>
-            <li class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="bg-slate-400 w-[60%] h-full"></div></li>
-          </ul>
+            <!-- Experience Item 1 -->
+            <div class="relative flex gap-6">
+              <div class="hidden sm:flex flex-shrink-0 w-16 h-16 rounded-2xl glass items-center justify-center z-10">
+                <span class="text-2xl">🎮</span>
+              </div>
+              <div class="glass p-6 rounded-2xl flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">Lead Gameplay Developer</h3>
+                    <p class="text-cyan-600 font-medium">Game Studio Name</p>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-sm font-medium">2023 - Present</span>
+                </div>
+                <p class="mt-4 text-slate-600 dark:text-slate-400">
+                  Led development of core gameplay systems for a multiplayer game with 50K+ daily active players. 
+                  Implemented combat, progression, and physics systems.
+                </p>
+                <ul class="mt-4 space-y-2">
+                  <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5"></i>
+                    Reduced server memory usage by 40% through optimization
+                  </li>
+                  <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5"></i>
+                    Implemented hit registration system with 99.9% accuracy
+                  </li>
+                  <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5"></i>
+                    Mentored 2 junior developers
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Experience Item 2 -->
+            <div class="relative flex gap-6">
+              <div class="hidden sm:flex flex-shrink-0 w-16 h-16 rounded-2xl glass items-center justify-center z-10">
+                <span class="text-2xl">💼</span>
+              </div>
+              <div class="glass p-6 rounded-2xl flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">Freelance Developer</h3>
+                    <p class="text-cyan-600 font-medium">Self-Employed</p>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-sm font-medium">2021 - 2023</span>
+                </div>
+                <p class="mt-4 text-slate-600 dark:text-slate-400">
+                  Developed custom systems for various game projects. Specialized in physics simulations, 
+                  UI frameworks, and performance optimization.
+                </p>
+                <ul class="mt-4 space-y-2">
+                  <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5"></i>
+                    Completed 15+ client projects
+                  </li>
+                  <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5"></i>
+                    100% positive client feedback
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+          </div>
         </div>
-
-        <!-- Col 2 -->
-        <div>
-          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Domains</h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-2 bg-white border border-slate-200 rounded-sm text-sm font-semibold text-slate-700 shadow-sm">Physics Simulation</span>
-            <span class="px-3 py-2 bg-white border border-slate-200 rounded-sm text-sm font-semibold text-slate-700 shadow-sm">Character Controllers</span>
-            <span class="px-3 py-2 bg-white border border-slate-200 rounded-sm text-sm font-semibold text-slate-700 shadow-sm">AI State Machines</span>
-            <span class="px-3 py-2 bg-white border border-slate-200 rounded-sm text-sm font-semibold text-slate-700 shadow-sm">Performance Profiling</span>
-            <span class="px-3 py-2 bg-white border border-slate-200 rounded-sm text-sm font-semibold text-slate-700 shadow-sm">Editor Tools</span>
+        
+        <!-- Testimonial -->
+        <div class="mt-16 glass p-8 rounded-2xl text-center">
+          <i data-lucide="quote" class="w-10 h-10 mx-auto text-cyan-600 mb-4"></i>
+          <blockquote class="text-lg text-slate-700 dark:text-slate-300 italic max-w-2xl mx-auto">
+            "One of the most reliable developers I've worked with. Delivers clean, well-documented code 
+            and actually understands game feel. Would hire again in a heartbeat."
+          </blockquote>
+          <div class="mt-4">
+            <div class="font-bold text-slate-900 dark:text-white">Client Name</div>
+            <div class="text-sm text-slate-500">Game Studio / Project</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- === CONTACT SECTION === -->
-    <section id="contact" class="py-24 bg-slate-900 text-white text-center">
-      <div class="max-w-2xl mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-6">Ready to Ship?</h2>
-        <p class="text-slate-400 mb-8 text-lg">
-          I am currently available for freelance, contract, or full-time opportunities.
-          <br class="hidden md:block">Send me a message with your project details.
-        </p>
-
-        <a href="https://x.com/Sumatr574140" target="_blank" class="inline-flex items-center gap-3 bg-cyan-600 hover:bg-cyan-500 text-white px-8 py-4 rounded-sm font-bold text-lg transition-all shadow-lg hover:shadow-cyan-500/25 hover:-translate-y-1">
-          <i data-lucide="twitter" class="w-5 h-5"></i> Contact on X
-        </a>
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-24 px-6 section-reveal">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400 text-sm font-medium mb-4">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            Get In Touch
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+            Let's Work Together
+          </h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+            Have a project in mind? I'm currently available for freelance work and full-time positions.
+          </p>
+        </div>
         
-        <div class="mt-12 pt-8 border-t border-slate-800 text-slate-600 text-sm mono">
-          &copy; <span id="year"></span> Bluefolio. Built with Physics.
+        <!-- Contact Cards -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          
+          <!-- Email -->
+          <a href="mailto:your.email@example.com" class="glass p-6 rounded-2xl text-center card-hover group">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i data-lucide="mail" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white">Email</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">your.email@example.com</p>
+          </a>
+          
+          <!-- Discord -->
+          <a href="https://discord.com/users/YOUR_ID" target="_blank" rel="noopener noreferrer" class="glass p-6 rounded-2xl text-center card-hover group">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i data-lucide="message-circle" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white">Discord</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">yourname#0000</p>
+          </a>
+          
+          <!-- Twitter/X -->
+          <a href="https://twitter.com/YOUR_HANDLE" target="_blank" rel="noopener noreferrer" class="glass p-6 rounded-2xl text-center card-hover group">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-sky-100 dark:bg-sky-900/30 text-sky-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i data-lucide="twitter" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white">Twitter/X</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">@yourhandle</p>
+          </a>
+          
+        </div>
+        
+        <!-- CTA -->
+        <div class="glass p-8 rounded-2xl text-center bg-gradient-to-r from-cyan-500/10 to-purple-500/10">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            Ready to start a project?
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 mb-6">
+            Tell me about your project, timeline, and budget. I'll get back to you within 24 hours.
+          </p>
+          <a href="mailto:your.email@example.com?subject=Project%20Inquiry" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-cyan-600/25 hover:shadow-purple-600/25 hover:scale-105">
+            <i data-lucide="send" class="w-5 h-5"></i>
+            Send Me a Message
+          </a>
+        </div>
+        
+        <!-- What to include -->
+        <div class="mt-8 text-center">
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            <strong>Pro tip:</strong> Include what you're building, your timeline, and your budget for the fastest response.
+          </p>
         </div>
       </div>
     </section>
 
+    <!-- FOOTER -->
+    <footer class="py-12 px-6 border-t border-slate-200 dark:border-slate-700">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+          
+          <!-- Left -->
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold">
+              YN
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 dark:text-white">Your Name</div>
+              <div class="text-sm text-slate-500">Gameplay Developer</div>
+            </div>
+          </div>
+          
+          <!-- Center - Social Links -->
+          <div class="flex items-center gap-4">
+            <a href="https://github.com/YOUR_GITHUB" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="GitHub">
+              <i data-lucide="github" class="w-5 h-5"></i>
+            </a>
+            <a href="https://twitter.com/YOUR_TWITTER" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Twitter">
+              <i data-lucide="twitter" class="w-5 h-5"></i>
+            </a>
+            <a href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="LinkedIn">
+              <i data-lucide="linkedin" class="w-5 h-5"></i>
+            </a>
+            <a href="mailto:your.email@example.com" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Email">
+              <i data-lucide="mail" class="w-5 h-5"></i>
+            </a>
+          </div>
+          
+          <!-- Right -->
+          <div class="text-sm text-slate-500">
+            © <span id="year"></span> Your Name. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
   </main>
 
-  <!-- SCRIPTS -->
   <script>
-    // 1. Initialize Icons
+    // Initialize Lucide icons
     lucide.createIcons();
-
-    // 2. Dynamic Year
+    
+    // Set current year
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // 3. Scroll Spy for Blade Nav
-    const sectionIds = ['home','projects','skills','contact'];
-    const navMap = new Map(sectionIds.map(id => [id, document.querySelector(`#nav-${id}`)]));
-
-    const observer = new IntersectionObserver((entries) => {
-      // Find the section that is most visible
-      const visible = entries
-        .filter(e => e.isIntersecting)
-        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-      
-      if (!visible) return;
-
-      // Update classes
-      navMap.forEach(link => link && link.classList.remove('active'));
-      const activeLink = navMap.get(visible.target.id);
-      if(activeLink) activeLink.classList.add('active');
-
-    }, { threshold: [0.2, 0.5, 0.8] });
-
-    sectionIds.forEach(id => {
-      const sec = document.getElementById(id);
-      if (sec) observer.observe(sec);
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Check for saved theme or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+      html.classList.add('dark');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+      lucide.createIcons(); // Re-render icons
+    });
+    
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // Close mobile menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+    
+    // Section reveal on scroll
+    const revealSections = document.querySelectorAll('.section-reveal');
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '-50px' });
+    
+    revealSections.forEach(section => revealObserver.observe(section));
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+    
+    // Nav background on scroll
+    const nav = document.querySelector('header nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        nav.classList.add('shadow-lg');
+      } else {
+        nav.classList.remove('shadow-lg');
+      }
     });
   </script>
 </body>
