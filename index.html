@@ -4,240 +4,264 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>bby512 | Roblox Scripter</title>
-  <meta name="description" content="Roblox Luau Scripter. Physics, Combat, UI. No spaghetti code." />
+  <title>bby512 | Roblox Developer</title>
+  <meta name="description" content="Roblox Systems Developer. Combat, Physics, and UI." />
   
+  <!-- Tailwind & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0f172a;      /* Slate 900 */
-      --card-bg: #1e293b; /* Slate 800 */
-      --accent: #38bdf8;  /* Sky 400 */
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
+      --bg: #0b0f19;       /* Deepest Slate */
+      --card: #151b2b;     /* Card Background */
+      --border: #2e364f;   /* Subtle Border */
+      --accent: #38bdf8;   /* Sky Blue */
+      --text: #e2e8f0;     /* Off-white text */
     }
 
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg);
-      color: var(--text-main);
+      color: var(--text);
       overflow-x: hidden;
     }
 
-    /* Subtle Grid Background */
-    .bg-grid {
-      background-size: 50px 50px;
-      background-image:
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      position: fixed; inset: 0; z-index: -1;
-      mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+    /* Soft Gradient Background */
+    .bg-glow {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100vh;
+      background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+      z-index: -1;
+      pointer-events: none;
     }
 
-    /* Blade Nav - Dark Mode */
-    .blade-nav-container { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 50; display: flex; flex-direction: column; gap: 1rem; pointer-events: none; }
+    /* Refined Blade Nav */
+    .blade-nav-container {
+      position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+      z-index: 50; display: flex; flex-direction: column; gap: 0.8rem;
+    }
+
     .blade-item {
-      pointer-events: auto; height: 50px; width: 55px; margin-left: -15px;
-      background: rgba(30, 41, 59, 0.8); /* Dark glass */
-      border: 1px solid rgba(148, 163, 184, 0.2); border-left: none;
-      display: flex; align-items: center; padding-left: 20px;
-      transform: skewX(-15deg); cursor: pointer; overflow: hidden;
-      transition: all 0.2s ease-out;
-      backdrop-filter: blur(4px);
+      width: 50px; height: 50px; margin-left: -10px;
+      background: rgba(21, 27, 43, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: none;
+      display: flex; align-items: center; padding-left: 18px;
+      transform: skewX(-12deg); cursor: pointer; transition: all 0.2s ease;
+      backdrop-filter: blur(5px);
     }
-    .blade-icon-wrapper { transform: skewX(15deg); }
-    .blade-text { transform: skewX(15deg); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-left: 15px; opacity: 0; transition: opacity 0.2s; white-space: nowrap; color: var(--accent); }
     
-    .blade-item:hover, .blade-item.active { width: 160px; background: var(--accent); border-color: var(--accent); transform: skewX(-15deg) translateX(5px); }
-    .blade-item:hover i, .blade-item.active i { color: #0f172a; } /* Dark icon on bright bg */
-    .blade-item:hover .blade-text, .blade-item.active .blade-text { opacity: 1; color: #0f172a; }
+    .blade-icon-wrapper { transform: skewX(12deg); }
+    .blade-text {
+      transform: skewX(12deg); font-weight: 600; font-size: 0.85rem;
+      margin-left: 14px; opacity: 0; color: white; white-space: nowrap; transition: opacity 0.2s;
+    }
 
-    /* Video Player */
-    .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; /* 16:9 Aspect Ratio */ background: #000; border-bottom: 1px solid #334155; }
-    .video-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .blade-item:hover, .blade-item.active {
+      width: 140px; background: var(--accent); border-color: var(--accent);
+      transform: skewX(-12deg) translateX(4px);
+    }
+    
+    .blade-item:hover i, .blade-item.active i { color: #0b0f19; }
+    .blade-item:hover .blade-text, .blade-item.active .blade-text { opacity: 1; color: #0b0f19; }
 
-    /* Typography */
+    /* Video Player - 16:9 Aspect Ratio Lock */
+    .video-wrapper {
+      position: relative; width: 100%; padding-top: 56.25%;
+      background: #000; border-bottom: 1px solid var(--border);
+    }
+    .video-wrapper video {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* Utilities */
     .mono { font-family: 'JetBrains Mono', monospace; }
-    .glow-text { text-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+    .glass-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .glass-card:hover {
+      border-color: #475569;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 
-<body class="selection:bg-sky-500 selection:text-white">
-  <div class="bg-grid"></div>
+<body class="selection:bg-sky-900 selection:text-sky-100">
+  
+  <div class="bg-glow"></div>
 
-  <!-- Mobile Top Bar -->
-  <header class="md:hidden sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800 p-4 flex justify-between items-center">
-    <div class="font-bold tracking-tight text-lg">bby<span class="text-sky-400">512</span></div>
-    <a href="#contact" class="text-xs font-bold bg-sky-500 text-slate-900 px-3 py-2 rounded hover:bg-sky-400">HIRE ME</a>
+  <!-- Mobile Header -->
+  <header class="md:hidden sticky top-0 z-40 bg-[#0b0f19]/90 backdrop-blur border-b border-white/10 p-4 flex justify-between items-center">
+    <div class="font-bold tracking-tight text-lg text-white">bby512</div>
+    <a href="#contact" class="text-xs font-bold bg-white text-black px-4 py-2 rounded hover:bg-slate-200">Contact</a>
   </header>
 
-  <!-- Navigation -->
+  <!-- Desktop Nav -->
   <nav class="blade-nav-container hidden md:flex">
-    <a href="#home" class="blade-item active" id="nav-home"><div class="blade-icon-wrapper"><i data-lucide="terminal" class="w-5 h-5 text-slate-400"></i></div><span class="blade-text">Home</span></a>
-    <a href="#work" class="blade-item" id="nav-work"><div class="blade-icon-wrapper"><i data-lucide="code" class="w-5 h-5 text-slate-400"></i></div><span class="blade-text">Work</span></a>
-    <a href="#stack" class="blade-item" id="nav-stack"><div class="blade-icon-wrapper"><i data-lucide="cpu" class="w-5 h-5 text-slate-400"></i></div><span class="blade-text">Stack</span></a>
-    <a href="#contact" class="blade-item" id="nav-contact"><div class="blade-icon-wrapper"><i data-lucide="at-sign" class="w-5 h-5 text-slate-400"></i></div><span class="blade-text">Contact</span></a>
+    <a href="#home" class="blade-item active" id="nav-home">
+      <div class="blade-icon-wrapper"><i data-lucide="user" class="w-5 h-5 text-slate-400"></i></div>
+      <span class="blade-text">Intro</span>
+    </a>
+    <a href="#work" class="blade-item" id="nav-work">
+      <div class="blade-icon-wrapper"><i data-lucide="layers" class="w-5 h-5 text-slate-400"></i></div>
+      <span class="blade-text">Work</span>
+    </a>
+    <a href="#contact" class="blade-item" id="nav-contact">
+      <div class="blade-icon-wrapper"><i data-lucide="mail" class="w-5 h-5 text-slate-400"></i></div>
+      <span class="blade-text">Contact</span>
+    </a>
   </nav>
 
   <main class="w-full md:pl-24">
     
-    <!-- HERO -->
-    <section id="home" class="min-h-screen flex flex-col justify-center px-6 py-12 max-w-4xl mx-auto">
-      <div class="mb-6">
-        <span class="inline-block py-1 px-2 rounded bg-slate-800 border border-slate-700 text-xs font-mono text-sky-400">
-          local Status = "Open for Work"
-        </span>
-      </div>
-      
-      <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter text-white mb-6">
-        Roblox <br>
-        <span class="text-sky-400 glow-text">Systems Eng.</span>
+    <!-- HERO SECTION -->
+    <section id="home" class="min-h-[80vh] flex flex-col justify-center px-6 max-w-4xl mx-auto pt-20">
+      <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6">
+        Roblox Systems <br> Developer.
       </h1>
       
-      <p class="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed mb-8">
-        I script things that actually replicate. <br>
-        Specialized in <span class="text-white font-bold">Physics</span>, <span class="text-white font-bold">Hitboxes</span>, and <span class="text-white font-bold">Math-heavy</span> mechanics. 
-        If you need spaghetti code, look elsewhere.
+      <p class="text-lg text-slate-400 max-w-xl leading-relaxed mb-8">
+        I specialize in scripting mechanics that feel responsive and perform well. 
+        Focusing on custom physics, combat systems, and diegetic UI tools.
       </p>
 
       <div class="flex flex-wrap gap-4">
-        <a href="#work" class="bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold px-6 py-3 rounded transition-all hover:translate-x-1 flex items-center gap-2">
-          <i data-lucide="play" class="w-4 h-4 fill-current"></i> Check the Demos
-        </a>
-        <a href="https://github.com/bby512" target="_blank" class="bg-transparent border border-slate-600 text-slate-300 hover:text-white hover:border-white px-6 py-3 rounded transition-all font-mono text-sm flex items-center gap-2">
-          <i data-lucide="github" class="w-4 h-4"></i> GitHub
+        <a href="#work" class="bg-white text-black font-bold px-6 py-3 rounded hover:bg-slate-200 transition-colors flex items-center gap-2">
+          <i data-lucide="arrow-down" class="w-4 h-4"></i> View Projects
         </a>
       </div>
     </section>
 
-    <!-- WORK / DEMOS -->
-    <section id="work" class="py-20 px-6 max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-white mb-2">The Work</h2>
-      <p class="text-slate-500 mb-12">No tutorials. Just raw mechanics I built.</p>
+    <!-- PROJECTS SECTION -->
+    <section id="work" class="py-20 px-6 max-w-6xl mx-auto border-t border-white/5">
+      <div class="flex items-end justify-between mb-10">
+        <h2 class="text-2xl font-bold text-white">Selected Projects</h2>
+      </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <!-- Combat -->
-        <div class="bg-slate-800 border border-slate-700 rounded overflow-hidden">
+        <!-- Project 1: Combat -->
+        <article class="glass-card group">
           <div class="video-wrapper">
-            <video src="Main%20menu%20and%20combat.mp4" autoplay loop muted playsinline></video>
+            <video src="Main%20menu%20and%20combat.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold text-white">Combat & Menu System</h3>
-            <p class="text-sm text-slate-400 mt-2 mb-4">
-              Handled the frontend UI states and backend hitbox logic. 
-              Secure remote events, proper cooldowns, and it actually feels snappy on high ping.
+            <h3 class="text-lg font-bold text-white mb-2">Combat System & UI</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              A complete loop handling the main menu, character spawning, and melee combat. Includes server-side hit validation and client-side visual effects.
             </p>
             <div class="flex gap-2">
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">Raycasting</span>
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">Maid Class</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Raycasting</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">RemoteEvents</span>
             </div>
           </div>
-        </div>
+        </article>
 
-        <!-- Water Physics -->
-        <div class="bg-slate-800 border border-slate-700 rounded overflow-hidden">
+        <!-- Project 2: Water -->
+        <article class="glass-card group">
           <div class="video-wrapper">
-            <video src="Water%20physics.mp4" autoplay loop muted playsinline></video>
+            <video src="Water%20physics.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold text-white">Custom Water Physics</h3>
-            <p class="text-sm text-slate-400 mt-2 mb-4">
-              I got bored of default terrain water. This uses BodyMovers and volume calculations 
-              to handle drag, buoyancy, and wave displacement per frame.
+            <h3 class="text-lg font-bold text-white mb-2">Custom Water Physics</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Calculates object volume and density to apply realistic buoyancy and drag. Objects bob naturally on waves rather than just floating statically.
             </p>
             <div class="flex gap-2">
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">Vector Math</span>
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">RunService</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Physics</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Vector3</span>
             </div>
           </div>
-        </div>
+        </article>
 
-        <!-- Ragdoll -->
-        <div class="bg-slate-800 border border-slate-700 rounded overflow-hidden">
+        <!-- Project 3: Ragdoll -->
+        <article class="glass-card group">
           <div class="video-wrapper">
-            <video src="Ragdoll.mp4" autoplay loop muted playsinline></video>
+            <video src="Ragdoll.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold text-white">Active Ragdoll</h3>
-            <p class="text-sm text-slate-400 mt-2 mb-4">
-              Physics-driven character that tries to balance itself. 
-              Uses BallSocketConstraints and Motor6D manipulation.
+            <h3 class="text-lg font-bold text-white mb-2">Active Ragdoll</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              A character controller that blends animation with physics constraints, allowing for realistic reactions to impacts while maintaining balance.
             </p>
             <div class="flex gap-2">
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">Constraints</span>
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">Physics</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Constraints</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Motor6D</span>
             </div>
           </div>
-        </div>
+        </article>
 
-        <!-- 3D Text + DOWNLOAD -->
-        <div class="bg-slate-800 border border-slate-700 rounded overflow-hidden">
+        <!-- Project 4: Text System (With Download) -->
+        <article class="glass-card group">
           <div class="video-wrapper">
-            <video src="DihhAhhtext.mp4" autoplay loop muted playsinline></video>
+            <video src="DihhAhhtext.mp4" autoplay loop muted playsinline loading="lazy"></video>
           </div>
-          <div class="p-6 flex flex-col h-auto">
-            <div class="flex justify-between items-start">
-              <h3 class="text-xl font-bold text-white">Diegetic 3D Text</h3>
-              <a href="Diegetic Text System.rbxl" download class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-3 py-1.5 rounded flex items-center gap-1 transition-colors">
-                <i data-lucide="download" class="w-3 h-3"></i> GET MODEL
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-lg font-bold text-white">Diegetic Text Module</h3>
+              <a href="Diegetic Text System.rbxl" download class="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded flex items-center gap-1 transition-colors">
+                <i data-lucide="download" class="w-3 h-3"></i> Model
               </a>
             </div>
-            <p class="text-sm text-slate-400 mt-2 mb-4">
-              A module I wrote to spawn text in world-space. Useful for damage indicators or RPG dialogue.
-              Clean API, easy to plug into any game.
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              A utility for rendering text elements in the 3D world space. Useful for damage numbers, dialogue bubbles, or in-world interaction prompts.
             </p>
-            <div class="mt-auto flex gap-2">
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">ModuleScript</span>
-              <span class="text-xs bg-slate-900 text-sky-400 px-2 py-1 rounded font-mono">UI</span>
+            <div class="flex gap-2">
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">ModuleScript</span>
+              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Tool</span>
             </div>
           </div>
-        </div>
+        </article>
 
       </div>
     </section>
 
-    <!-- STACK -->
-    <section id="stack" class="py-20 px-6 max-w-4xl mx-auto border-t border-slate-800">
-      <h2 class="text-2xl font-bold text-white mb-8">What I use</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+    <!-- TECHNICAL OVERVIEW -->
+    <section class="py-10 px-6 max-w-4xl mx-auto">
+      <div class="border-t border-white/5 pt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h3 class="text-slate-500 font-mono text-sm uppercase mb-4">The Basics</h3>
-          <ul class="space-y-3 text-slate-300">
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500"></i> Luau (obviously)</li>
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500"></i> Rojo (VS Code workflow)</li>
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500"></i> Github / Git</li>
+          <h4 class="text-white font-bold mb-4">Core Competencies</h4>
+          <ul class="space-y-2 text-slate-400 text-sm">
+            <li>• Luau / Roblox API</li>
+            <li>• Knit Framework Structure</li>
+            <li>• DataStore & ProfileService</li>
+            <li>• Replication & Networking</li>
           </ul>
         </div>
         <div>
-          <h3 class="text-slate-500 font-mono text-sm uppercase mb-4">Frameworks / Libs</h3>
-          <ul class="space-y-3 text-slate-300">
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500"></i> ProfileService (Data)</li>
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500"></i> Fusion (UI)</li>
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500"></i> Knit (Networking)</li>
+          <h4 class="text-white font-bold mb-4">Focus Areas</h4>
+          <ul class="space-y-2 text-slate-400 text-sm">
+            <li>• Game Mechanics & Systems</li>
+            <li>• Physics Interactions</li>
+            <li>• User Interface (Fusion/Roact)</li>
+            <li>• Tool Development</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="py-24 px-6 text-center">
-      <h2 class="text-3xl font-bold text-white mb-6">Need a Scripter?</h2>
-      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
-        I take commissions for specific systems or long-term projects.
-        Send me a DM with your game idea and budget. Don't just say "Hi."
-      </p>
-      
-      <a href="https://x.com/Sumatr574140" target="_blank" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-8 py-4 rounded font-bold transition-all">
-        <i data-lucide="twitter" class="w-5 h-5"></i> DM me on X
-      </a>
-
-      <div class="mt-16 text-xs text-slate-600 font-mono">
-        © <span id="year"></span> bby512. No exploiters allowed.
+    <section id="contact" class="py-24 px-6 text-center border-t border-white/5 bg-[#0b0f19]">
+      <div class="max-w-2xl mx-auto">
+        <h2 class="text-3xl font-bold text-white mb-4">Let's work together.</h2>
+        <p class="text-slate-400 mb-8">
+          I am currently open for commissions and long-term scripting roles.
+        </p>
+        
+        <a href="https://x.com/Sumatr574140" target="_blank" class="inline-flex items-center gap-2 bg-[#1da1f2] hover:bg-[#1a91da] text-white px-6 py-3 rounded font-bold transition-all shadow-lg hover:shadow-[#1da1f2]/20">
+          <i data-lucide="twitter" class="w-5 h-5"></i> Message on X
+        </a>
       </div>
+
+      <footer class="mt-20 text-xs text-slate-600 font-mono">
+        &copy; <span id="year"></span> bby512.
+      </footer>
     </section>
 
   </main>
@@ -247,7 +271,7 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Scroll Logic
-    const sectionIds = ['home','work','stack','contact'];
+    const sectionIds = ['home','work','contact'];
     const navMap = new Map(sectionIds.map(id => [id, document.querySelector(`#nav-${id}`)]));
 
     const observer = new IntersectionObserver((entries) => {
@@ -255,7 +279,7 @@
       if (!visible) return;
       navMap.forEach(link => link && link.classList.remove('active'));
       navMap.get(visible.target.id)?.classList.add('active');
-    }, { threshold: 0.4 });
+    }, { threshold: 0.25 });
 
     sectionIds.forEach(id => {
       const sec = document.getElementById(id);
