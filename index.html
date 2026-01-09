@@ -3,307 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dingleberry</title>
   
-  <title>Dingleberry | Roblox Scripter</title>
-  <meta name="description" content="Roblox Systems Developer. Combat, Physics, and UI." />
-  
-  <!-- Tailwind & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css">
 
   <style>
     :root {
-      --bg: #0b0f19;       /* Deepest Slate */
-      --card: #151b2b;     /* Card Background */
-      --border: #2e364f;   /* Subtle Border */
-      --accent: #38bdf8;   /* Sky Blue */
-      --text: #e2e8f0;     /* Off-white text */
+      --bg: #0e0e10;
+      --card: #161618;
+      --text: #a1a1aa;
+      --bright: #ededed;
+      --border: rgba(255,255,255,0.05);
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Geist Sans', sans-serif;
       background-color: var(--bg);
       color: var(--text);
+      letter-spacing: -0.05em;
+      margin: 0;
       overflow-x: hidden;
     }
 
-    /* Soft Gradient Background */
-    .bg-glow {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100vh;
-      background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 60%);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    /* Blade Nav */
-    .blade-nav-container {
-      position: fixed; left: 0; top: 50%; transform: translateY(-50%);
-      z-index: 50; display: flex; flex-direction: column; gap: 0.8rem;
-    }
-
-    .blade-item {
-      width: 50px; height: 50px; margin-left: -10px;
-      background: rgba(21, 27, 43, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-left: none;
-      display: flex; align-items: center; padding-left: 18px;
-      transform: skewX(-12deg); cursor: pointer; transition: all 0.2s ease;
-      backdrop-filter: blur(5px);
-    }
-    
-    .blade-icon-wrapper { transform: skewX(12deg); }
-    .blade-text {
-      transform: skewX(12deg); font-weight: 600; font-size: 0.85rem;
-      margin-left: 14px; opacity: 0; color: white; white-space: nowrap; transition: opacity 0.2s;
-    }
-
-    .blade-item:hover, .blade-item.active {
-      width: 140px; background: var(--accent); border-color: var(--accent);
-      transform: skewX(-12deg) translateX(4px);
-    }
-    
-    .blade-item:hover i, .blade-item.active i { color: #0b0f19; }
-    .blade-item:hover .blade-text, .blade-item.active .blade-text { opacity: 1; color: #0b0f19; }
-
-    /* Video Player */
-    .video-wrapper {
-      position: relative; width: 100%; padding-top: 56.25%;
-      background: #000; border-bottom: 1px solid var(--border);
-    }
-    .video-wrapper video {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
-    }
-
-    /* Utilities */
-    .mono { font-family: 'JetBrains Mono', monospace; }
-    .glass-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    /* THE PARALLAX SCROLLER */
+    .scroll-wrapper {
+      cursor: grab; width: 100vw; height: 600px;
+      display: flex; align-items: center; user-select: none;
       overflow: hidden;
-      transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .glass-card:hover {
-      border-color: #475569;
-      transform: translateY(-2px);
+    .scroll-container {
+      display: flex; gap: 40px; padding: 0 10vw; will-change: transform;
+    }
+    .card-prefab {
+      flex: 0 0 500px; height: 500px; overflow: hidden;
+      position: relative; background: var(--card);
+      /* FIXED: Removed border-radius for sharp corners */
+      border: 1px solid var(--border);
+    }
+    .card-prefab video {
+      position: absolute; height: 100%; width: 160%;
+      left: -30%; top: 0; object-fit: cover;
+      pointer-events: none; will-change: transform;
+      opacity: 0.8;
     }
     
-    /* Discord Toast Notification */
-    .toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
-      background: #22c55e; color: #000; padding: 10px 20px; border-radius: 50px;
-      font-weight: bold; font-size: 0.9rem; opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 100; pointer-events: none;
+    .card-info {
+      position: absolute; bottom: 40px; left: 40px; z-index: 10;
+      color: white; pointer-events: none;
     }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    .tuff-title {
+      font-size: clamp(3.5rem, 15vw, 10rem);
+      /* FIXED: Locked in your 1.1 spacing */
+      line-height: 1.1; 
+      font-weight: 800; 
+      color: white;
+    }
+
+    .btn-x {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: white; color: black; padding: 16px 32px;
+      border-radius: 100px; font-weight: 900; font-size: 1.1rem;
+      transition: transform 0.2s;
+    }
+    .btn-x:hover { transform: scale(1.05); }
   </style>
 </head>
 
-<body class="selection:bg-sky-900 selection:text-sky-100">
-  
-  <div class="bg-glow"></div>
-  <div id="toast" class="toast">Copied to clipboard!</div>
+<body>
 
-  <!-- Mobile Header -->
-  <header class="md:hidden sticky top-0 z-40 bg-[#0b0f19]/90 backdrop-blur border-b border-white/10 p-4 flex justify-between items-center">
-    <div class="font-bold tracking-tight text-lg text-white">Dingleberry</div>
-    <a href="#contact" class="text-xs font-bold bg-white text-black px-4 py-2 rounded hover:bg-slate-200">Contact</a>
-  </header>
-
-  <!-- Desktop Nav -->
-  <nav class="blade-nav-container hidden md:flex">
-    <a href="#home" class="blade-item active" id="nav-home">
-      <div class="blade-icon-wrapper"><i data-lucide="user" class="w-5 h-5 text-slate-400"></i></div>
-      <span class="blade-text">Intro</span>
-    </a>
-    <a href="#work" class="blade-item" id="nav-work">
-      <div class="blade-icon-wrapper"><i data-lucide="layers" class="w-5 h-5 text-slate-400"></i></div>
-      <span class="blade-text">Work</span>
-    </a>
-    <a href="#contact" class="blade-item" id="nav-contact">
-      <div class="blade-icon-wrapper"><i data-lucide="message-square" class="w-5 h-5 text-slate-400"></i></div>
-      <span class="blade-text">Discord</span>
-    </a>
-  </nav>
-
-  <main class="w-full md:pl-24">
-    
-    <!-- HERO SECTION -->
-    <section id="home" class="min-h-[85vh] flex flex-col justify-center px-6 max-w-4xl mx-auto pt-20">
-      <div class="mb-6">
-         <span class="text-sky-400 font-mono text-sm tracking-wide">
-           // ROBOLOX SCRIPTER
-         </span>
-      </div>
-
-      <h1 class="text-5xl md:text-8xl font-extrabold text-white tracking-tighter mb-6 leading-tight">
-        I script things<br>
-        <span class="text-slate-500">that move.</span>
+  <main>
+    <section class="min-h-screen flex flex-col justify-center px-8 md:px-20">
+      <h1 class="tuff-title tracking-tighter">
+        Making the <br>
+        <span class="text-red-600 italic">impossible.</span>
       </h1>
-      
-      <p class="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed mb-8">
-        I handle the heavy math stuff—custom physics, combat loops, and UI. 
-        I write code that actually runs smooth without breaking the server.
-      </p>
+    </section>
 
-      <div class="flex flex-wrap gap-4">
-        <a href="#work" class="bg-white text-black font-bold px-8 py-4 rounded hover:bg-slate-200 transition-colors flex items-center gap-2">
-          View Projects <i data-lucide="arrow-down" class="w-4 h-4"></i>
+    <section id="work" class="py-20">
+      <div class="scroll-wrapper" id="wrapper">
+        <div class="scroll-container" id="container">
+          <div class="card-prefab">
+            <video src="Main%20menu%20and%20combat.mp4" autoplay loop muted playsinline class="p-img"></video>
+            <div class="card-info"><h4 class="text-3xl font-bold italic uppercase">Combat</h4></div>
+          </div>
+          <div class="card-prefab">
+            <video src="Water%20physics.mp4" autoplay loop muted playsinline class="p-img"></video>
+            <div class="card-info"><h4 class="text-3xl font-bold italic uppercase">Hydro</h4></div>
+          </div>
+          <div class="card-prefab">
+            <video src="Ragdoll.mp4" autoplay loop muted playsinline class="p-img"></video>
+            <div class="card-info"><h4 class="text-3xl font-bold italic uppercase">Physics</h4></div>
+          </div>
+          <div class="card-prefab">
+            <video src="DihhAhhtext.mp4" autoplay loop muted playsinline class="p-img"></video>
+            <div class="card-info"><h4 class="text-3xl font-bold italic uppercase">Text</h4></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="min-h-[80vh] flex flex-col justify-center px-8 md:px-20">
+      <h2 class="tuff-title mb-16">Let's build.</h2>
+      
+      <div>
+        <a href="https://x.com/Sumatr574140" target="_blank" class="btn-x">
+          <i data-lucide="twitter" class="w-6 h-6"></i> 
+          X / TWITTER
         </a>
       </div>
-    </section>
 
-    <!-- PROJECTS SECTION -->
-    <section id="work" class="py-20 px-6 max-w-6xl mx-auto border-t border-white/5">
-      <div class="flex items-end justify-between mb-12">
-        <div>
-          <h2 class="text-3xl font-bold text-white">The Work</h2>
-          <p class="text-slate-500 mt-2">No tutorials. Just raw mechanics I built.</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-        <!-- Project 1: Combat -->
-        <article class="glass-card group">
-          <div class="video-wrapper">
-            <video src="Main%20menu%20and%20combat.mp4" autoplay loop muted playsinline loading="lazy"></video>
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-white mb-2">Combat System & UI</h3>
-            <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              A full loop handling the main menu, character spawning, and melee combat. Includes server-side hit validation so exploiters can't reach infinite distance.
-            </p>
-            <div class="flex gap-2 font-mono">
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Raycasting</span>
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">RemoteEvents</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Project 2: Water -->
-        <article class="glass-card group">
-          <div class="video-wrapper">
-            <video src="Water%20physics.mp4" autoplay loop muted playsinline loading="lazy"></video>
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-white mb-2">Custom Water Physics</h3>
-            <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              I got bored of default terrain water. This uses volume calculations to handle drag and buoyancy. Objects bob naturally on waves instead of just freezing.
-            </p>
-            <div class="flex gap-2 font-mono">
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Physics</span>
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Vector3</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Project 3: Ragdoll -->
-        <article class="glass-card group">
-          <div class="video-wrapper">
-            <video src="Ragdoll.mp4" autoplay loop muted playsinline loading="lazy"></video>
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-white mb-2">Active Ragdoll</h3>
-            <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              Physics-driven character that tries to balance itself. It reacts to impacts naturally but keeps the player in control so it doesn't feel like a noodle.
-            </p>
-            <div class="flex gap-2 font-mono">
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Constraints</span>
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Motor6D</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Project 4: Text System -->
-        <article class="glass-card group">
-          <div class="video-wrapper">
-            <video src="DihhAhhtext.mp4" autoplay loop muted playsinline loading="lazy"></video>
-          </div>
-          <div class="p-6">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold text-white">Diegetic Text Module</h3>
-              <a href="Diegetic Text System.rbxl" download class="text-xs bg-sky-600/20 hover:bg-sky-600/40 text-sky-300 px-3 py-1.5 rounded flex items-center gap-2 transition-colors font-bold border border-sky-600/30">
-                <i data-lucide="download" class="w-3 h-3"></i> DOWNLOAD MODEL
-              </a>
-            </div>
-            <p class="text-sm text-slate-400 leading-relaxed mb-4">
-              A utility for rendering text in 3D space. Useful for damage numbers or dialogue bubbles. Clean API, easy to drop into any game.
-            </p>
-            <div class="flex gap-2 font-mono">
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">ModuleScript</span>
-              <span class="text-xs border border-white/10 text-slate-300 px-2 py-1 rounded">Tool</span>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="py-32 px-6 text-center border-t border-white/5 bg-[#0b0f19]">
-      <div class="max-w-2xl mx-auto">
-        <h2 class="text-4xl font-bold text-white mb-6">Need a Scripter?</h2>
-        <p class="text-slate-400 mb-10 text-lg">
-          I'm open for commissions. Send me a DM with what you need and your budget.
-        </p>
-        
-        <div class="flex flex-col md:flex-row items-center justify-center gap-4">
-          <!-- X BUTTON -->
-          <a href="https://x.com/Sumatr574140" target="_blank" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#000] border border-white/20 hover:border-white text-white px-8 py-4 rounded font-bold transition-all">
-            <i data-lucide="twitter" class="w-5 h-5"></i> DM on X
-          </a>
-          
-          <!-- DISCORD COPY BUTTON -->
-          <button onclick="copyDiscord()" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white px-8 py-4 rounded font-bold transition-all shadow-lg hover:shadow-[#5865F2]/20 group">
-            <i data-lucide="message-square" class="w-5 h-5"></i> 
-            <span id="discord-text">Copy Discord</span>
-          </button>
-        </div>
-
-        <div class="mt-8 text-sm text-slate-500 font-mono">
-          Discord: <span class="text-slate-300 select-all">Dingeberry_was_here</span>
-        </div>
-      </div>
-
-      <footer class="mt-24 text-xs text-slate-700 font-mono">
-        &copy; <span id="year"></span> Dingleberry.
+      <footer class="mt-40 mb-10 text-[11px] font-black text-zinc-800 tracking-[0.5em] uppercase">
+        Dingleberry ts aint copyrighted vro
       </footer>
     </section>
-
   </main>
 
   <script>
-    lucide.createIcons();
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Parallax Drag Logic
+    const container = document.getElementById('container');
+    const wrapper = document.getElementById('wrapper');
+    const imgs = document.querySelectorAll('.p-img');
 
-    // Copy Discord Function
-    function copyDiscord() {
-      const discordHandle = "Dingeberry_was_here";
-      navigator.clipboard.writeText(discordHandle).then(() => {
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0; 
+    let targetX = 0;
+
+    wrapper.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX - targetX;
+      wrapper.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      targetX = e.pageX - startX;
+      const maxScroll = -(container.offsetWidth - window.innerWidth + 200);
+      if (targetX > 0) targetX = 0;
+      if (targetX < maxScroll) targetX = maxScroll;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      wrapper.style.cursor = 'grab';
+    });
+
+    function animate() {
+      currentX += (targetX - currentX) * 0.08; 
+      container.style.transform = `translateX(${currentX}px)`;
+
+      imgs.forEach((img) => {
+        const parent = img.parentElement;
+        const rect = parent.getBoundingClientRect();
+        const viewportCenter = window.innerWidth / 2;
+        const cardCenter = rect.left + (rect.width / 2);
+        const distanceFromCenter = cardCenter - viewportCenter;
+        const pMove = distanceFromCenter * 0.15; 
+        img.style.transform = `translateX(${-pMove}px)`;
       });
+
+      requestAnimationFrame(animate);
     }
 
-    // Scroll Logic
-    const sectionIds = ['home','work','contact'];
-    const navMap = new Map(sectionIds.map(id => [id, document.querySelector(`#nav-${id}`)]));
-
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      navMap.forEach(link => link && link.classList.remove('active'));
-      navMap.get(visible.target.id)?.classList.add('active');
-    }, { threshold: 0.25 });
-
-    sectionIds.forEach(id => {
-      const sec = document.getElementById(id);
-      if (sec) observer.observe(sec);
-    });
+    animate();
+    lucide.createIcons();
   </script>
 </body>
 </html>
